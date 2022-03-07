@@ -20,6 +20,47 @@
                 <span class="menu-title">Home</span>
             </a>
         </div>
+        <div data-kt-menu-trigger="click" class="menu-item menu-accordion mb-1">
+            <span class="menu-link">
+                <span class="menu-icon">
+                    <!--begin::Svg Icon | path: assets/media/icons/duotune/maps/map001.svg-->
+                    <span class="svg-icon svg-icon-muted svg-icon-2"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path opacity="0.3" d="M6 22H4V3C4 2.4 4.4 2 5 2C5.6 2 6 2.4 6 3V22Z" fill="black"/>
+                        <path d="M18 14H4V4H18C18.8 4 19.2 4.9 18.7 5.5L16 9L18.8 12.5C19.3 13.1 18.8 14 18 14Z" fill="black"/>
+                        </svg>
+                    </span>
+                    <!--end::Svg Icon-->
+                </span>
+                <span class="menu-title">Regions</span>
+                <span class="menu-arrow"></span>
+            </span>
+            <div class="menu-sub menu-sub-accordion" kt-hidden-height="120" style="display: none; overflow: hidden;">
+                <div class="menu-item">
+                    <a class="menu-link" href="{{ route('states.index') }}">
+                        <span class="menu-bullet">
+                            <span class="bullet bullet-dot"></span>
+                        </span>
+                        <span class="menu-title">States</span>
+                    </a>
+                </div>
+                <div class="menu-item">
+                    <a class="menu-link" href="{{ route('counties.index') }}">
+                        <span class="menu-bullet">
+                            <span class="bullet bullet-dot"></span>
+                        </span>
+                        <span class="menu-title">Counties</span>
+                    </a>
+                </div>
+                <div class="menu-item">
+                    <a class="menu-link" href="{{ route('payams.index') }}">
+                        <span class="menu-bullet">
+                            <span class="bullet bullet-dot"></span>
+                        </span>
+                        <span class="menu-title">PAYAMS</span>
+                    </a>
+                </div>
+            </div>
+        </div>
     </div>
     <!--end::Menu-->
 </div>
