@@ -1,4 +1,4 @@
-<a href="{{ route('users.edit',$user) }}" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1" data-bs-toggle="tooltip" data-placement="bottom" title="Edit User">
+<a href="{{ route('states.edit',$state) }}" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1" data-bs-toggle="tooltip" data-placement="bottom" title="Edit State">
     <!--begin::Svg Icon | path: icons/duotune/general/gen019.svg-->
     <span class="svg-icon svg-icon-muted svg-icon-2hx">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">

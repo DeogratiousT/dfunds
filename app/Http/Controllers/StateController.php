@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Regions\State;
 use Illuminate\Http\Request;
+use App\Models\Regions\State;
+use App\Http\Controllers\Controller;
+use App\Laratables\StatesLaratables;
+use Freshbitsweb\Laratables\Laratables;
 
 class StateController extends Controller
 {
@@ -14,6 +17,10 @@ class StateController extends Controller
      */
     public function index()
     {
+        if (request()->ajax()) {
+            return Laratables::recordsOf(State::class, StatesLaratables::class);
+        }
+        
         return view('dashboard.regions.states.index');
     }
 
