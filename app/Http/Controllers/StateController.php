@@ -42,7 +42,11 @@ class StateController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        State::create($request->validate([
+            'name' => 'required|unique:states,name|string',
+        ]));
+
+        return redirect()->route('states.index')->with('success','State Created Successfully');
     }
 
     /**
