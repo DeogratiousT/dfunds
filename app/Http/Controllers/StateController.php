@@ -7,6 +7,7 @@ use App\Models\Regions\State;
 use App\Http\Controllers\Controller;
 use App\Laratables\StatesLaratables;
 use Freshbitsweb\Laratables\Laratables;
+use Illuminate\Support\Facades\Validator;
 
 class StateController extends Controller
 {
@@ -42,11 +43,20 @@ class StateController extends Controller
      */
     public function store(Request $request)
     {
-        State::create($request->validate([
+        $validator = Validator::make($request->all(), [
             'name' => 'required|unique:states,name|string',
-        ]));
+        ]);
+        dd('fi;');
+        
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()->all()]);
+        }
 
-        return redirect()->route('states.index')->with('success','State Created Successfully');
+        State::create([
+            'name' => $validator['name']
+        ]);
+
+        return response()->json(['success' => 'State Created Successfully']);
     }
 
     /**

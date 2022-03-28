@@ -3,7 +3,7 @@
 @section('title','States')
 
 @section('page-imports')
-    <link href="{{ asset('metronic/css/datatables.bundle.css') }}" rel="stylesheet" />
+    <link href="{{ asset('metronic/assets/plugins/custom/datatables/datatables.bundle.css') }}" rel="stylesheet" />
 @endsection
 
 @section('page-title', 'States')
@@ -69,20 +69,11 @@
                         <div class="col-12">
                             <div class="form-group mb-4">
                                 <label class="form-label" for="name">Full Name</label>
-                                <input type="text" name="name" id="name" class="form-control @error('name') is-invalid @enderror" placeholder="John Doe"/>
-                                @error('name')
-                                    <span class="invalid-feedback" role="alert">
-                                        {{ $message }}
-                                    </span>
-                                    <script>
-                                        var createStateModal = document.getElementById('create-state-modal');
-                                        var modal = bootstrap.Modal.getInstance(createStateModal);
-                                        modal.show();
-                                    </script>
-                                @enderror
+                                <input type="text" name="name" id="name" class="form-control" placeholder="John Doe"/>
+                                <span class="invalid-feedback" role="alert" id="name-error"></span>
                             </div>
 
-                            <button type="submit" id="kt_button" class="btn btn-primary">
+                            <button type="submit" id="kt_states_submit" class="btn btn-primary">
                                 <span class="indicator-label">Continue</span>
                                 <span class="indicator-progress">Please wait... 
                                     <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
@@ -95,10 +86,27 @@
         </div>
     </div>
     <!--end:: Create Modal -->
+
+    <!--begin:: Danger Modal -->
+    <div class="modal fade" tabindex="-1" id="danger-alert-modal">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content modal-filled bg-danger">
+                <div class="modal-body p-4">
+                    <div class="text-center">
+                        <i class="dripicons-wrong h1"></i>
+                        <h4 class="mt-2">Oh snap!</h4>
+                        <p id="error-p" class="mt-3"></p>
+                        <button type="button" class="btn btn-light my-2" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
 @endsection
 
 @push('scripts')
-    <script src="{{ asset('metronic/js/datatables.bundle.js') }}"></script>
+    <script src="{{ asset('metronic/assets/plugins/custom/datatables/datatables.bundle.js') }}"></script>
+    <script src="{{ asset('js/app.js') }}"></script>
     <script>
         $(document).ready(function(){
             $("#states-laratable").DataTable({
@@ -125,6 +133,57 @@
                 "<'col-sm-12 col-md-7 d-flex align-items-center justify-content-center justify-content-md-end'p>" +
                 ">"
             });
+        });
+
+    </script>
+
+    <script>
+        let subButton = document.getElementById('kt_states_submit');
+
+        subButton.addEventListener('click', 
+        (event) => {
+            event.preventDefault();
+
+                subButton.setAttribute("data-kt-indicator", "on");
+
+            let requestBody = {
+                name : document.getElementById('name').value
+            }
+
+            axios.post("{{ route('states.store') }}", requestBody)
+            .then((response) => {
+                if (response.data.success) {
+                    console.log('success');
+                    subButton.setAttribute("data-kt-indicator", "off");
+
+                    document.getElementById('success-alert').innerHTML = response.data.success;
+                    let createStateModal = document.getElementById('create-state-modal');
+                    let modal = bootstrap.Modal.getInstance(createStateModal);
+                    modal.hide();
+
+                }else if(response.data.errors){
+                    subButton.setAttribute("data-kt-indicator", "off");
+                    
+                    document.getElementById('name-error').innerHTML = response.data.errors[0];
+                    document.getElementById('name').classList.toggle('is-invalid');
+                    
+                    let createStateModal = document.getElementById('create-state-modal');
+                    let modal = bootstrap.Modal.getInstance(createStateModal);
+                    modal.show();
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+                subButton.setAttribute("data-kt-indicator", "off");
+
+                let createStateModal = document.getElementById('create-state-modal');
+                let cmodal = bootstrap.Modal.getInstance(createStateModal);
+                cmodal.hide();
+
+                let dangerStateModal = document.getElementById('danger-alert-modal');
+                let modal = bootstrap.Modal.getInstance(dangerStateModal);
+                modal.show();
+            })
         });
     </script>
 @endpush

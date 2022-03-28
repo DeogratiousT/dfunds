@@ -21,8 +21,8 @@
 		<!--end::Fonts-->
 
 		<!--begin::Global Stylesheets Bundle(used by all pages)-->
-		<link href="{{ asset('metronic/css/plugins/plugins.bundle.css') }}" rel="stylesheet" type="text/css" />
-		<link href="{{ asset('metronic/css/style.bundle.css') }}" rel="stylesheet" type="text/css" />
+		<link href="{{ asset('metronic/assets/plugins/global/plugins.bundle.css') }}" rel="stylesheet" type="text/css" />
+		<link href="{{ asset('metronic/assets/css/style.bundle.css') }}" rel="stylesheet" type="text/css" />
 		<!--end::Global Stylesheets Bundle-->
 
 		<!--begin::Custom Stylesheets-->

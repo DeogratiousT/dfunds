@@ -67,6 +67,19 @@
         <!--begin::Scripts -->
         @include('dashboard.includes.scripts')
         <!--end::Scripts -->
+
+        <!--begin::Indicator Script -->
+        <script>
+            // Element to indecate
+            var subButton = document.querySelector("#kt_button");
+        
+            // Handle button click event
+            button.addEventListener("click", function() {
+                // Activate indicator
+                subButton.setAttribute("data-kt-indicator", "on");
+            });
+        </script>
+        <!--end::Indicator Script -->
     </body>
     <!--end::Body-->
 @endsection
