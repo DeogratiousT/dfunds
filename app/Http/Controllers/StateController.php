@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Regions\State;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Laratables\StatesLaratables;
 use Freshbitsweb\Laratables\Laratables;
@@ -46,17 +47,20 @@ class StateController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required|unique:states,name|string',
         ]);
-        dd('fi;');
         
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()->all()]);
         }
 
+        $validated = $validator->safe();
+
         State::create([
-            'name' => $validator['name']
+            'name' => $validated['name']
         ]);
 
-        return response()->json(['success' => 'State Created Successfully']);
+        $request->session()->flash('success', 'State Created Successfully');
+
+        return response()->json(['success' => true]);
     }
 
     /**

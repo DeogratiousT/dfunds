@@ -153,19 +153,16 @@
             axios.post("{{ route('states.store') }}", requestBody)
             .then((response) => {
                 if (response.data.success) {
-                    console.log('success');
-                    subButton.setAttribute("data-kt-indicator", "off");
-
-                    document.getElementById('success-alert').innerHTML = response.data.success;
-                    let createStateModal = document.getElementById('create-state-modal');
-                    let modal = bootstrap.Modal.getInstance(createStateModal);
-                    modal.hide();
-
+                    window.location.reload();
+                    
                 }else if(response.data.errors){
                     subButton.setAttribute("data-kt-indicator", "off");
                     
                     document.getElementById('name-error').innerHTML = response.data.errors[0];
-                    document.getElementById('name').classList.toggle('is-invalid');
+
+                    if (! document.getElementById('name').classList.contains("is-invalid")) {
+                        document.getElementById('name').classList.add('is-invalid'); 
+                    }                    
                     
                     let createStateModal = document.getElementById('create-state-modal');
                     let modal = bootstrap.Modal.getInstance(createStateModal);
@@ -173,16 +170,17 @@
                 }
             })
             .catch((error) => {
-                console.log(error);
                 subButton.setAttribute("data-kt-indicator", "off");
 
                 let createStateModal = document.getElementById('create-state-modal');
                 let cmodal = bootstrap.Modal.getInstance(createStateModal);
                 cmodal.hide();
 
-                let dangerStateModal = document.getElementById('danger-alert-modal');
-                let modal = bootstrap.Modal.getInstance(dangerStateModal);
-                modal.show();
+                let error_alert = document.getElementById('error-alert-message');
+                error_alert.innerHTML = "An Error Occured, Please try again later";
+                if (error_alert.parentElement.parentNode.classList.contains("d-none")) {
+                    error_alert.parentElement.parentNode.classList.remove("d-none");
+                }
             })
         });
     </script>

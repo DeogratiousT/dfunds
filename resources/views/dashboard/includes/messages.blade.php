@@ -1,41 +1,36 @@
-@if (session('status'))
-    <!--begin::Alert-->
-    <div class="alert alert-primary">
-        <!--begin::Wrapper-->
-        <div class="d-flex flex-column">
-            <!--begin::Content-->
-            <span>{{ session('status') }}</span>
-            <!--end::Content-->
-        </div>
-        <!--end::Wrapper-->
+<!--begin::Alert-->
+<div class="alert alert-primary d-none">
+    <!--begin::Wrapper-->
+    <div class="d-flex flex-column">
+        <!--begin::Content-->
+        <span id="status-alert-message"></span>
+        <!--end::Content-->
     </div>
-    <!--end::Alert-->
-@endif
+    <!--end::Wrapper-->
+</div>
+<!--end::Alert-->
 
-@if (session('success'))
-    <!--begin::Alert-->
-    <div class="alert alert-success">
-        <!--begin::Wrapper-->
-        <div class="d-flex flex-column">
-            <!--begin::Content-->
-            <span>{{ session('success') }}</span>
-            <!--end::Content-->
-        </div>
-        <!--end::Wrapper-->
-    </div>
-    <!--end::Alert-->
-@endif
 
-@if (session('error'))
-    <!--begin::Alert-->
-    <div class="alert alert-danger">
-        <!--begin::Wrapper-->
-        <div class="d-flex flex-column">
-            <!--begin::Content-->
-            <span>{{ session('error') }}</span>
-            <!--end::Content-->
-        </div>
-        <!--end::Wrapper-->
+<!--begin::Alert-->
+<div class="alert alert-success d-none">
+    <!--begin::Wrapper-->
+    <div class="d-flex flex-column">
+        <!--begin::Content-->
+        <span id="success-alert-message"></span>
+        <!--end::Content-->
     </div>
-    <!--end::Alert-->
-@endif
+    <!--end::Wrapper-->
+</div>
+<!--end::Alert-->
+
+<!--begin::Alert-->
+<div class="alert alert-danger d-none">
+    <!--begin::Wrapper-->
+    <div class="d-flex flex-column">
+        <!--begin::Content-->
+        <span id="error-alert-message"></span>
+        <!--end::Content-->
+    </div>
+    <!--end::Wrapper-->
+</div>
+<!--end::Alert-->

@@ -4,6 +4,11 @@ namespace App\Laratables;
 
 class StatesLaratables
 {
+    public static function laratableQueryConditions($query)
+    {
+        return $query->orderBy('name');
+    }
+
     public static function laratablesAdditionalColumns()
     {
         return ['slug'];
