@@ -1,0 +1,7 @@
+type Mutation {
+    login(input: LoginInput @spread): LoginResponse! @field(resolver: "AuthMutation@login")
+
+    register(input: RegisterInput @spread): RegisterResponse! @field(resolver: "AuthMutation@register")
+
+    logout(input: LogoutInput @spread): LogoutResponse! @field(resolver: "AuthMutation@logout")
+}

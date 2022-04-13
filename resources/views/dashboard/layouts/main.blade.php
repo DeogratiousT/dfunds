@@ -111,17 +111,19 @@
 								<!--end::Actions-->
 							</div>
 							<!--end::Container-->
-							<!--begin::Messages-->
-							@include('dashboard.includes.messages')
-							@include('dashboard.includes.if_messages')
-							<!--end::Messages-->
 						</div>
 						<!--end::Toolbar-->
 						<!--begin::Post-->
 						<div class="post d-flex flex-column-fluid" id="kt_post">
 							<!--begin::Container-->
 							<div id="kt_content_container" class="container-xxl">
+								<!--begin::Messages-->
+								@include('dashboard.includes.messages')
+								@include('dashboard.includes.if_messages')
+								<!--end::Messages-->
+
 								@yield('content')
+								
 							</div>
 							<!--end::Container-->
 						</div>

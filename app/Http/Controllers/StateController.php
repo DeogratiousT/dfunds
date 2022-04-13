@@ -94,7 +94,22 @@ class StateController extends Controller
      */
     public function update(Request $request, State $state)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string',
+        ]);
+        
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()->all()]);
+        }
+
+        $validated = $validator->safe();
+
+        $state->name = $validated['name'];
+        $state->save();
+
+        $request->session()->flash('success', 'State Updated Successfully');
+
+        return response()->json(['success' => true]);
     }
 
     /**
@@ -105,6 +120,8 @@ class StateController extends Controller
      */
     public function destroy(State $state)
     {
-        //
+        $state->delete();
+
+        return redirect()->route('states.index')->with('success','State Deleted Successfully');
     }
 }

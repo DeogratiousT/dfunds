@@ -1,0 +1,7 @@
+extend type Mutation {
+    createState(input: CreateStateInput @spread): CreateStateResponse! @field(resolver: "StateMutation@store")
+
+    updateState(input: UpdateStateInput @spread): UpdateStateResponse! @field(resolver: "StateMutation@update")
+
+    deleteState(input: DestroyStateInput @spread): DestroyStateResponse! @field(resolver: "StateMutation@destroy")
+}

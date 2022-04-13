@@ -68,8 +68,8 @@
                         @csrf
                         <div class="col-12">
                             <div class="form-group mb-4">
-                                <label class="form-label" for="name">Full Name</label>
-                                <input type="text" name="name" id="name" class="form-control" placeholder="John Doe"/>
+                                <label class="form-label" for="name">Name</label>
+                                <input type="text" name="name" id="name" class="form-control" value="{{ old('name') }}" placeholder="North SA"/>
                                 <span class="invalid-feedback" role="alert" id="name-error"></span>
                             </div>
 
@@ -86,22 +86,6 @@
         </div>
     </div>
     <!--end:: Create Modal -->
-
-    <!--begin:: Danger Modal -->
-    <div class="modal fade" tabindex="-1" id="danger-alert-modal">
-        <div class="modal-dialog modal-sm">
-            <div class="modal-content modal-filled bg-danger">
-                <div class="modal-body p-4">
-                    <div class="text-center">
-                        <i class="dripicons-wrong h1"></i>
-                        <h4 class="mt-2">Oh snap!</h4>
-                        <p id="error-p" class="mt-3"></p>
-                        <button type="button" class="btn btn-light my-2" data-bs-dismiss="modal">Close</button>
-                    </div>
-                </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
 @endsection
 
 @push('scripts')

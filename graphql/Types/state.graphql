@@ -1,0 +1,34 @@
+type State @model(class: "\\App\\Models\\Regions\\State"){
+    id: ID!
+    name: String!
+    created_at: DateTime!
+    updated_at: DateTime!
+}
+
+input CreateStateInput {  
+    name: String! @rules(apply: ["required", "string", "unique:states,name"])
+}
+
+input UpdateStateInput {  
+    id: Int! @rules(apply: ["required", "integer", "exists:states,id"])
+    name: String! @rules(apply: ["required", "string", "unique:states,name"])
+}
+
+input DestroyStateInput {  
+    id: Int! @rules(apply: ["required", "integer", "exists:states,id"])
+}
+
+type CreateStateResponse {
+    message: String!
+    state: State!
+}
+
+type UpdateStateResponse {
+    message: String!
+    state: State!
+}
+
+type DestroyStateResponse {
+    message: String!
+    state: State!
+}

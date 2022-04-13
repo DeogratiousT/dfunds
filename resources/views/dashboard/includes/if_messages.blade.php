@@ -1,6 +1,6 @@
 @if (session('status'))
     <!--begin::Alert-->
-    <div class="alert alert-primary">
+    <div class="alert alert-primary alert-dismissible fade show" role="alert">
         <!--begin::Wrapper-->
         <div class="d-flex flex-column">
             <!--begin::Content-->
@@ -8,13 +8,14 @@
             <!--end::Content-->
         </div>
         <!--end::Wrapper-->
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
     <!--end::Alert-->
 @endif
 
 @if (session('success'))
     <!--begin::Alert-->
-    <div class="alert alert-success">
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
         <!--begin::Wrapper-->
         <div class="d-flex flex-column">
             <!--begin::Content-->
@@ -22,13 +23,14 @@
             <!--end::Content-->
         </div>
         <!--end::Wrapper-->
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
     <!--end::Alert-->
 @endif
 
 @if (session('error'))
     <!--begin::Alert-->
-    <div class="alert alert-danger">
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
         <!--begin::Wrapper-->
         <div class="d-flex flex-column">
             <!--begin::Content-->
@@ -36,6 +38,7 @@
             <!--end::Content-->
         </div>
         <!--end::Wrapper-->
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
     <!--end::Alert-->
 @endif

@@ -1,0 +1,7 @@
+extend type Query {
+    state(id: ID @eq
+      name: String @eq @rules(apply: ["prohibits:id", "required_without:id", "string"])
+    ): State @find
+
+    states(name: String @where(operator: "like")): [State!]! @paginate(defaultCount: 10)
+}
