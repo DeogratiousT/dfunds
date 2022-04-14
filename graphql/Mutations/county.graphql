@@ -1,0 +1,7 @@
+extend type Mutation {
+    createCounty(input: CreateCountyInput @spread): CreateCountyResponse! @field(resolver: "CountyMutation@store")
+
+    updateCounty(input: UpdateCountyInput @spread): UpdateCountyResponse! @field(resolver: "CountyMutation@update")
+
+    deleteCounty(input: DestroyCountyInput @spread): DestroyCountyResponse! @field(resolver: "CountyMutation@destroy")
+}

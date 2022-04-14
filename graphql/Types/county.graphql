@@ -1,0 +1,37 @@
+type County @model(class: "\\App\\Models\\Regions\\County"){
+    id: ID!
+    name: String!
+    state: State! @belongsTo
+    created_at: DateTime!
+    updated_at: DateTime!
+}
+
+input CreateCountyInput {  
+    name: String! @rules(apply: ["required", "string", "unique:counties,name"])
+    state_id: Int! @rules(apply: ["required", "integer", "exists:states,id"])
+}
+
+input UpdateCountyInput {  
+    id: Int! @rules(apply: ["required", "integer", "exists:counties,id"])
+    name: String! @rules(apply: ["required", "string"])
+    state_id: Int! @rules(apply: ["required", "integer", "exists:states,id"])
+}
+
+input DestroyCountyInput {  
+    id: Int! @rules(apply: ["required", "integer", "exists:counties,id"])
+}
+
+type CreateCountyResponse {
+    message: String!
+    county: County!
+}
+
+type UpdateCountyResponse {
+    message: String!
+    county: County!
+}
+
+type DestroyCountyResponse {
+    message: String!
+    county: County!
+}
