@@ -19,6 +19,8 @@ class CreateCountiesTable extends Migration
             $table->string('slug')->unique();
             $table->unsignedBigInteger('state_id');
             $table->timestamps();
+
+            $table->foreign('state_id')->references('id')->on('states')->onDelete('cascade');
         });
     }
 

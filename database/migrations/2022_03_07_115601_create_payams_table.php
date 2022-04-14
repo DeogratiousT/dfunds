@@ -19,6 +19,8 @@ class CreatePayamsTable extends Migration
             $table->string('slug')->unique();
             $table->unsignedBigInteger('county_id');
             $table->timestamps();
+
+            $table->foreign('county_id')->references('id')->on('counties')->onDelete('cascade');
         });
     }
 

@@ -69,7 +69,7 @@
                         <div class="col-12">
                             <div class="form-group mb-4">
                                 <label class="form-label" for="name">Name</label>
-                                <input type="text" name="name" id="name" class="form-control" value="{{ old('name') }}" placeholder="North SA"/>
+                                <input type="text" name="name" id="name" class="form-control" value="{{ old('name') }}"/>
                                 <span class="invalid-feedback" role="alert" id="name-error"></span>
                             </div>
 

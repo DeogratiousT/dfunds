@@ -2,6 +2,7 @@
 
 namespace App\Models\Regions;
 
+use App\Models\Regions\State;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 use Illuminate\Database\Eloquent\Model;
@@ -31,5 +32,14 @@ class County extends Model
     public function getRouteKeyName()
     {
         return 'slug';
+    }
+
+    /**
+     * County - State Relationship
+     * @return belongsTo 
+     */
+    public function state()
+    {
+        return $this->belongsTo(State::class);
     }
 }

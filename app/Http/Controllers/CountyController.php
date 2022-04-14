@@ -2,8 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Regions\County;
 use Illuminate\Http\Request;
+use App\Models\Regions\State;
+use App\Models\Regions\County;
+use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
+use App\Laratables\CountiesLaratables;
+use Freshbitsweb\Laratables\Laratables;
+use Illuminate\Support\Facades\Validator;
 
 class CountyController extends Controller
 {
@@ -14,7 +20,11 @@ class CountyController extends Controller
      */
     public function index()
     {
-        //
+        if (request()->ajax()) {
+            return Laratables::recordsOf(County::class, CountiesLaratables::class);
+        }
+
+        return view('dashboard.regions.counties.index');
     }
 
     /**
@@ -35,7 +45,25 @@ class CountyController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|unique:counties,name|string',
+            'state_id' => 'required|exists:states,id|string',
+        ]);
+        
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()]);
+        }
+
+        $validated = $validator->safe();
+
+        County::create([
+            'name' => $validated['name'],
+            'state_id' => $validated['state_id']
+        ]);
+
+        $request->session()->flash('success', 'County Created Successfully');
+
+        return response()->json(['success' => true]);
     }
 
     /**
@@ -69,7 +97,22 @@ class CountyController extends Controller
      */
     public function update(Request $request, County $county)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string',
+        ]);
+        
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()->all()]);
+        }
+
+        $validated = $validator->safe();
+
+        $county->name = $validated['name'];
+        $county->save();
+
+        $request->session()->flash('success', 'County Updated Successfully');
+
+        return response()->json(['success' => true]);
     }
 
     /**
@@ -80,6 +123,8 @@ class CountyController extends Controller
      */
     public function destroy(County $county)
     {
-        //
+        $county->delete();
+
+        return redirect()->route('counties.index')->with('success','County Deleted Successfully');
     }
 }

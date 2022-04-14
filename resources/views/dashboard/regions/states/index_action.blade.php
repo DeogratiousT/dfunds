@@ -72,7 +72,7 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Delete State</h4>
+                <h4 class="modal-title">Delete {{ $state->name }}</h4>
 
                 <!--begin::Close-->
                 <div class="btn btn-icon btn-sm btn-active-light-danger ms-2" data-bs-dismiss="modal" aria-label="Close">
@@ -109,7 +109,7 @@
 <!--end:: Delete Modal -->
 
 <script>
-    function editState(obj){
+    function deleteState(obj){
         event.preventDefault();
 
         obj.setAttribute("data-kt-indicator", "on");
