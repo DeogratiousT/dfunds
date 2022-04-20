@@ -1,4 +1,4 @@
-<a href="{{ route('states.edit',$state) }}" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1" data-bs-toggle="tooltip" data-placement="bottom" title="Edit State">
+<button class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1" data-bs-toggle="modal" data-bs-target="#edit-payam-{{ $payam->id }}-modal">
     <!--begin::Svg Icon | path: icons/duotune/general/gen019.svg-->
     <span class="svg-icon svg-icon-muted svg-icon-2hx">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -8,4 +8,267 @@
         </svg>
     </span>
     <!--end::Svg Icon-->
-</a>
+</button>
+
+<button class="btn btn-icon btn-bg-light btn-active-color-danger btn-sm me-1" data-bs-toggle="modal" data-bs-target="#delete-payam-{{ $payam->id }}-modal">
+    <!--begin::Svg Icon | path: assets/media/icons/duotune/general/gen027.svg-->
+    <span class="svg-icon svg-icon-danger svg-icon-2hx">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+        <path d="M5 9C5 8.44772 5.44772 8 6 8H18C18.5523 8 19 8.44772 19 9V18C19 19.6569 17.6569 21 16 21H8C6.34315 21 5 19.6569 5 18V9Z" fill="black"/>
+        <path opacity="0.5" d="M5 5C5 4.44772 5.44772 4 6 4H18C18.5523 4 19 4.44772 19 5V5C19 5.55228 18.5523 6 18 6H6C5.44772 6 5 5.55228 5 5V5Z" fill="black"/>
+        <path opacity="0.5" d="M9 4C9 3.44772 9.44772 3 10 3H14C14.5523 3 15 3.44772 15 4V4H9V4Z" fill="black"/>
+        </svg>
+    </span>
+    <!--end::Svg Icon-->
+</button>
+
+<!--start:: Create Modal -->
+<div class="modal fade" tabindex="-1" id="edit-payam-{{ $payam->id }}-modal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Edit PAYAM</h4>
+
+                <!--begin::Close-->
+                <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                    <!--begin::Svg Icon | path: assets/media/icons/duotune/abstract/abs012.svg-->
+                    <span class="svg-icon svg-icon-muted svg-icon-2hx"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path opacity="0.3" d="M6.7 19.4L5.3 18C4.9 17.6 4.9 17 5.3 16.6L16.6 5.3C17 4.9 17.6 4.9 18 5.3L19.4 6.7C19.8 7.1 19.8 7.7 19.4 8.1L8.1 19.4C7.8 19.8 7.1 19.8 6.7 19.4Z" fill="black"/>
+                        <path d="M19.5 18L18.1 19.4C17.7 19.8 17.1 19.8 16.7 19.4L5.40001 8.1C5.00001 7.7 5.00001 7.1 5.40001 6.7L6.80001 5.3C7.20001 4.9 7.80001 4.9 8.20001 5.3L19.5 16.6C19.9 16.9 19.9 17.6 19.5 18Z" fill="black"/>
+                        </svg>
+                    </span>
+                    <!--end::Svg Icon-->
+                </div>
+                <!--end::Close-->
+            </div>
+
+            <div class="modal-body row">
+                <form action="" method="">
+                    @csrf
+
+                    <div class="col-12">
+                        <div class="form-group mb-4">
+                            <label class="form-label" for="edit_name">Name</label>
+                            <input type="text" name="edit_name" id="edit_name" class="form-control" value="{{ $payam->name }}"/>
+                            <span class="invalid-feedback" role="alert" id="edit-name-error"></span>
+                        </div>
+
+                        <div class="form-group mb-4">
+                            <label class="form-label" for="edit_state_id">State</label>
+                            <select name="edit_state_id" id="edit_state_id" class="form-control" onchange="updateCounties(this)">
+                                @foreach ($states as $state)
+                                    <option value="{{ json_encode($state->counties) }}" @if($state->id == $payam->county->state->id) selected @endif>{{ $state->name }}</option>
+                                @endforeach
+                            </select>
+                            <span class="invalid-feedback" role="alert" id="edit-state-error"></span>
+                        </div>
+
+                        <div class="form-group mb-4">
+                            <label class="form-label" for="edit_county_id">County</label>
+                            <select name="edit_county_id" id="edit_county_id" class="form-control">
+                                @foreach ($payam->county->state->counties as $county)
+                                    <option value="{{ $county->id }}" @if($county->id == $payam->county_id) selected @endif>{{ $county->name }}</option>
+                                @endforeach
+                            </select>
+                            <span class="invalid-feedback" role="alert" id="edit-county-error"></span>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary" onclick="editCounty(this , {{ $payam->id }})" id="edit-submit">
+                            <span class="indicator-label">Continue</span>
+                            <span class="indicator-progress">Please wait... 
+                                <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                            </span>
+                        </button>
+                    </div> 
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!--end:: Create Modal -->
+
+<!--start:: Delete Modal -->
+<div class="modal fade" tabindex="-1" id="delete-payam-{{ $payam->id }}-modal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Delete {{ $payam->name }}</h4>
+
+                <!--begin::Close-->
+                <div class="btn btn-icon btn-sm btn-active-light-danger ms-2" data-bs-dismiss="modal" aria-label="Close">
+                    <!--begin::Svg Icon | path: assets/media/icons/duotune/abstract/abs012.svg-->
+                    <span class="svg-icon svg-icon-muted svg-icon-2hx"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path opacity="0.3" d="M6.7 19.4L5.3 18C4.9 17.6 4.9 17 5.3 16.6L16.6 5.3C17 4.9 17.6 4.9 18 5.3L19.4 6.7C19.8 7.1 19.8 7.7 19.4 8.1L8.1 19.4C7.8 19.8 7.1 19.8 6.7 19.4Z" fill="black"/>
+                        <path d="M19.5 18L18.1 19.4C17.7 19.8 17.1 19.8 16.7 19.4L5.40001 8.1C5.00001 7.7 5.00001 7.1 5.40001 6.7L6.80001 5.3C7.20001 4.9 7.80001 4.9 8.20001 5.3L19.5 16.6C19.9 16.9 19.9 17.6 19.5 18Z" fill="black"/>
+                        </svg>
+                    </span>
+                    <!--end::Svg Icon-->
+                </div>
+                <!--end::Close-->
+            </div>
+
+            <div class="modal-body row">
+                <form action="{{ route('payams.destroy', $payam) }}" method="POST" id="delete-payam-{{ $payam->id }}-form">
+                    @csrf
+                    @method('DELETE')
+
+                    <p>Deleting this payam deletes all is related PAYAMS and Payams</p>
+
+                    <button type="submit" class="btn btn-danger" onclick="deleteCounty(this)">
+                        <span class="indicator-label">Continue</span>
+                        <span class="indicator-progress">Please wait... 
+                            <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                        </span>
+                    </button>
+                    </div> 
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!--end:: Delete Modal -->
+
+<script>
+    function deleteCounty(obj){
+        event.preventDefault();
+
+        obj.setAttribute("data-kt-indicator", "on");
+
+        obj.parentNode.submit();
+    }
+
+    function editCounty(obj, payam){
+        event.preventDefault();
+
+        obj.setAttribute("data-kt-indicator", "on");
+
+        let editStateSelect = document.getElementById('edit_state_id');
+        let editCntySelect = document.getElementById('edit_county_id');
+
+        let es_state_id;
+        
+        if (editStateSelect.options.length > 0) {
+            es_state_id = JSON.parse(editStateSelect.options[editStateSelect.selectedIndex].value);
+            es_state_id = es_state_id['0'].state_id;
+        }else{
+            es_state_id = null;
+        }
+
+        let es_county_id;
+        if (editCntySelect.options.length > 0) {
+            es_county_id = editCntySelect.options[editCntySelect.selectedIndex].value;
+        }else{
+            es_county_id = null;
+        }
+
+        let requestBody = {
+            _method: 'PUT',
+            name : document.getElementById('edit_name').value,
+            county_id : es_county_id,
+            state_id : es_state_id
+        }
+
+        this.clearEditErrors();
+
+        var url = '{{ route("payams.update", ":payam") }}';
+        url = url.replace(':payam', payam);
+
+        axios.post(url, requestBody)
+        .then((response) => {
+        if (response.data.success) {
+            window.location.replace("{{ route('payams.index') }}");
+            
+        }else if(response.data.errors){
+            obj.setAttribute("data-kt-indicator", "off");
+            
+            if (response.data.errors.name) {
+                document.getElementById('edit-name-error').innerHTML = response.data.errors.name;
+
+                if (! document.getElementById('edit_name').classList.contains("is-invalid")) {
+                    document.getElementById('edit_name').classList.add('is-invalid'); 
+                } 
+            }
+
+            if (response.data.errors.county_id) {
+                document.getElementById('edit-county-error').innerHTML = response.data.errors.county_id; 
+                
+                if (! document.getElementById('edit_county_id').classList.contains("is-invalid")) {
+                    document.getElementById('edit_county_id').classList.add('is-invalid'); 
+                }
+            }
+
+            if (response.data.errors.state_id) {
+                document.getElementById('edit-state-error').innerHTML = response.data.errors.state_id; 
+                
+                if (! document.getElementById('edit_state_id').classList.contains("is-invalid")) {
+                    document.getElementById('edit_state_id').classList.add('is-invalid'); 
+                }
+            }
+            
+            let editStateModal = document.getElementById('edit-payam-' + payam + '-modal');
+            let modal = bootstrap.Modal.getInstance(editStateModal);
+            modal.show();
+            }
+        })
+        .catch((error) => {
+            obj.setAttribute("data-kt-indicator", "off");
+
+            let editStateModal = document.getElementById('edit-payam-' + payam + '-modal');
+            let emodal = bootstrap.Modal.getInstance(editStateModal);
+            emodal.hide();
+
+            let error_alert = document.getElementById('error-alert-message');
+            error_alert.innerHTML = "An Error Occured, Please try again later";
+            if (error_alert.parentElement.parentNode.classList.contains("d-none")) {
+                error_alert.parentElement.parentNode.classList.remove("d-none");
+            }
+        });
+    }
+
+    function clearEditErrors()
+    {
+        document.getElementById('edit-state-error').innerHTML = '';
+        document.getElementById('edit-county-error').innerHTML = '';
+        document.getElementById('edit-name-error').innerHTML = '';
+
+        if (document.getElementById('edit_name').classList.contains("is-invalid")) {
+            document.getElementById('edit_name').classList.remove('is-invalid'); 
+        }
+
+        if (document.getElementById('edit_county_id').classList.contains("is-invalid")) {
+            document.getElementById('edit_county_id').classList.remove('is-invalid'); 
+        }
+
+        if (document.getElementById('edit_state_id').classList.contains("is-invalid")) {
+            document.getElementById('edit_state_id').classList.remove('is-invalid'); 
+        }
+    }
+
+    function updateCounties(obj)
+    {
+        let counties = JSON.parse(obj.options[obj.selectedIndex].value);
+        let countySelect = document.getElementById('edit_county_id');
+
+        if (typeof counties != 'object' || Object.keys(counties).length === 0) {
+            countySelect.innerHTML = '';
+
+            let snOption = document.createElement("option");
+            snOption.innerHTML = "State has No Counties, Select another State to Proceed";
+            snOption.style.display = "none";
+            countySelect.appendChild(snOption);
+
+            document.getElementById('edit-submit').disabled = true;
+        }else{
+            countySelect.innerHTML = '';
+
+            counties.forEach(county => {                    
+                let sOption = document.createElement("option");
+                sOption.innerHTML = county.name;
+                sOption.value = county.id;
+                countySelect.appendChild(sOption);
+            });
+
+            document.getElementById('edit-submit').disabled = false;
+        }
+    }
+</script>

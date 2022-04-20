@@ -127,7 +127,10 @@
             name : document.getElementById('edit_name').value
         }
 
-        axios.post("{{ route('states.update', $state) }}", requestBody)
+        var url = '{{ route("states.update", ":state") }}';
+        url = url.replace(':state', state);
+
+        axios.post(url, requestBody)
         .then((response) => {
         if (response.data.success) {
             window.location.replace("{{ route('states.index') }}");

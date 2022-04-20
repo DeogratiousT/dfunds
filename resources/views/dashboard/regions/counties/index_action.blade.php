@@ -56,6 +56,7 @@
                         <div class="form-group mb-4">
                             <label class="form-label" for="edit_state_id">State</label>
                             <select name="edit_state_id" id="edit_state_id" class="form-control">
+                                <option>Select State Here</option>
                                 @foreach ($states as $state)
                                     <option value="{{ $state->id }}"@if($state->id == $county->state_id) selected @endif>{{ $state->name }}</option>
                                 @endforeach
@@ -140,7 +141,12 @@
             state_id : editStateSelect.options[editStateSelect.selectedIndex].value
         }
 
-        axios.post("{{ route('counties.update', $county) }}", requestBody)
+        this.clearEditErrors(); 
+
+        var url = '{{ route("counties.update", ":county") }}';
+        url = url.replace(':county', county);
+
+        axios.post(url, requestBody)
         .then((response) => {
         if (response.data.success) {
             window.location.replace("{{ route('counties.index') }}");
@@ -150,18 +156,18 @@
             
             if (response.data.errors.name) {
                 document.getElementById('edit-name-error').innerHTML = response.data.errors.name;
+
+                if (! document.getElementById('edit_name').classList.contains("is-invalid")) {
+                    document.getElementById('edit_name').classList.add('is-invalid'); 
+                } 
             }
 
             if (response.data.errors.state_id) {
-                document.getElementById('edit-state-error').innerHTML = response.data.errors.state_id;    
-            }
-
-            if (! document.getElementById('edit_name').classList.contains("is-invalid")) {
-                document.getElementById('edit_name').classList.add('is-invalid'); 
-            } 
-            
-            if (! document.getElementById('edit_state_id').classList.contains("is-invalid")) {
-                document.getElementById('edit_state_id').classList.add('is-invalid'); 
+                document.getElementById('edit-state-error').innerHTML = response.data.errors.state_id; 
+                
+                if (! document.getElementById('edit_state_id').classList.contains("is-invalid")) {
+                    document.getElementById('edit_state_id').classList.add('is-invalid'); 
+                }
             }
             
             let editStateModal = document.getElementById('edit-county-' + county + '-modal');
@@ -182,5 +188,19 @@
                 error_alert.parentElement.parentNode.classList.remove("d-none");
             }
         });
+    }
+
+    function clearEditErrors()
+    {
+        document.getElementById('edit-state-error').innerHTML = '';
+        document.getElementById('edit-name-error').innerHTML = '';
+
+        if (document.getElementById('edit_state_id').classList.contains("is-invalid")) {
+            document.getElementById('edit_state_id').classList.remove('is-invalid'); 
+        }
+
+        if (document.getElementById('edit_state_id').classList.contains("is-invalid")) {
+            document.getElementById('edit_state_id').classList.remove('is-invalid'); 
+        }
     }
 </script>

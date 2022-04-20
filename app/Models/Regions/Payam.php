@@ -3,6 +3,7 @@
 namespace App\Models\Regions;
 
 use Spatie\Sluggable\HasSlug;
+use App\Models\Regions\County;
 use Spatie\Sluggable\SlugOptions;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -31,5 +32,10 @@ class Payam extends Model
     public function getRouteKeyName()
     {
         return 'slug';
+    }
+
+    public function county()
+    {
+        return $this->belongsTo(County::class);
     }
 }

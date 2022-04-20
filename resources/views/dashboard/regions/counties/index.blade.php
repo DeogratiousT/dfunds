@@ -77,6 +77,7 @@
                             <div class="form-group mb-4">
                                 <label class="form-label" for="state_id">State</label>
                                 <select name="state_id" id="state_id" class="form-control">
+                                    <option>Select State Here</option>
                                     @foreach ($states as $state)
                                         <option value="{{ $state->id }}">{{ $state->name }}</option>
                                     @endforeach
@@ -148,6 +149,8 @@
                 state_id : stateSelect.options[stateSelect.selectedIndex].value
             }
 
+            this.clearCreateErrors();
+
             axios.post("{{ route('counties.store') }}", requestBody)
             .then((response) => {
                 if (response.data.success) {
@@ -158,19 +161,19 @@
                     
                     if (response.data.errors.name) {
                         document.getElementById('name-error').innerHTML = response.data.errors.name;
+
+                        if (! document.getElementById('name').classList.contains("is-invalid")) {
+                            document.getElementById('name').classList.add('is-invalid'); 
+                        }
                     }
 
                     if (response.data.errors.state_id) {
-                        document.getElementById('state-error').innerHTML = response.data.errors.state_id;    
-                    }
-
-                    if (! document.getElementById('name').classList.contains("is-invalid")) {
-                        document.getElementById('name').classList.add('is-invalid'); 
-                    }
-                    
-                    if (! document.getElementById('state_id').classList.contains("is-invalid")) {
-                        document.getElementById('state_id').classList.add('is-invalid'); 
-                    }
+                        document.getElementById('state-error').innerHTML = response.data.errors.state_id; 
+                        
+                        if (! document.getElementById('state_id').classList.contains("is-invalid")) {
+                            document.getElementById('state_id').classList.add('is-invalid'); 
+                        }
+                    } 
                     
                     let createStateModal = document.getElementById('create-county-modal');
                     let modal = bootstrap.Modal.getInstance(createStateModal);
@@ -191,5 +194,19 @@
                 }
             })
         });
+
+        function clearCreateErrors()
+        {
+            document.getElementById('state-error').innerHTML = '';
+            document.getElementById('name-error').innerHTML = '';
+
+            if (document.getElementById('state_id').classList.contains("is-invalid")) {
+                document.getElementById('state_id').classList.remove('is-invalid'); 
+            }
+
+            if (document.getElementById('state_id').classList.contains("is-invalid")) {
+                document.getElementById('state_id').classList.remove('is-invalid'); 
+            }
+        }
     </script>
 @endpush

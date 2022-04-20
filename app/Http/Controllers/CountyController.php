@@ -47,7 +47,7 @@ class CountyController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|unique:counties,name|string',
-            'state_id' => 'required|exists:states,id|string',
+            'state_id' => 'required|exists:states,id|integer',
         ]);
         
         if ($validator->fails()) {
@@ -99,15 +99,17 @@ class CountyController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|string',
+            'state_id' => 'required|exists:states,id|integer',
         ]);
         
         if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()->all()]);
+            return response()->json(['errors' => $validator->errors()]);
         }
 
         $validated = $validator->safe();
 
         $county->name = $validated['name'];
+        $county->state_id = $validated['state_id'];
         $county->save();
 
         $request->session()->flash('success', 'County Updated Successfully');

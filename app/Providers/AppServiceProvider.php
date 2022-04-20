@@ -30,8 +30,8 @@ class AppServiceProvider extends ServiceProvider
             URL::forceScheme('https');
         }
 
-        View::creator(['dashboard.regions.counties.index', 'dashboard.regions.counties.index_action'], function ($view) {
-            $view->with('states', State::all());
+        View::creator(['dashboard.regions.counties.index', 'dashboard.regions.counties.index_action', 'dashboard.regions.payams.index', 'dashboard.regions.payams.index_action'], function ($view) {
+            $view->with('states', State::with('counties')->get());
         });
     }
 }
