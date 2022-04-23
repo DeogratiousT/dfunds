@@ -22,15 +22,15 @@
     <!--end::Svg Icon-->
 </button>
 
-<!--start:: Create Modal -->
-<div class="modal fade" tabindex="-1" id="edit-state-{{ $state->id }}-modal">
+<!--start:: Edit Modal -->
+<div class="modal fade" id="edit-state-{{ $state->id }}-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title">Edit State</h4>
 
                 <!--begin::Close-->
-                <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close" onclick="closeModal({{ json_encode($state) }})">
                     <!--begin::Svg Icon | path: assets/media/icons/duotune/abstract/abs012.svg-->
                     <span class="svg-icon svg-icon-muted svg-icon-2hx"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                         <path opacity="0.3" d="M6.7 19.4L5.3 18C4.9 17.6 4.9 17 5.3 16.6L16.6 5.3C17 4.9 17.6 4.9 18 5.3L19.4 6.7C19.8 7.1 19.8 7.7 19.4 8.1L8.1 19.4C7.8 19.8 7.1 19.8 6.7 19.4Z" fill="black"/>
@@ -48,9 +48,9 @@
 
                     <div class="col-12">
                         <div class="form-group mb-4">
-                            <label class="form-label" for="edit_name">Name</label>
-                            <input type="text" name="edit_name" id="edit_name" class="form-control" value="{{ $state->name }}"/>
-                            <span class="invalid-feedback" role="alert" id="edit-name-error"></span>
+                            <label class="form-label" for="edit_name_{{ $state->id }}">Name</label>
+                            <input type="text" name="edit_name_{{ $state->id }}" id="edit_name_{{ $state->id }}" class="form-control" value="{{ $state->name }}"/>
+                            <span class="invalid-feedback" role="alert" id="edit-name-{{ $state->id }}-error"></span>
                         </div>
 
                         <button type="submit" class="btn btn-primary" onclick="editState(this , {{ $state->id }})">
@@ -68,7 +68,7 @@
 <!--end:: Create Modal -->
 
 <!--start:: Delete Modal -->
-<div class="modal fade" tabindex="-1" id="delete-state-{{ $state->id }}-modal">
+<div class="modal fade" tabindex="-1" id="delete-state-{{ $state->id }}-modal" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -122,13 +122,17 @@
 
         obj.setAttribute("data-kt-indicator", "on");
 
+        let name = document.getElementById('edit_name_' + state).value;
+
         let requestBody = {
             _method: 'PUT',
-            name : document.getElementById('edit_name').value
+            name : name
         }
 
-        var url = '{{ route("states.update", ":state") }}';
+        let url = '{{ route("states.update", ":state") }}';
         url = url.replace(':state', state);
+
+        this.clearEditErrors(state);
 
         axios.post(url, requestBody)
         .then((response) => {
@@ -138,11 +142,13 @@
         }else if(response.data.errors){
             obj.setAttribute("data-kt-indicator", "off");
             
-            document.getElementById('edit-name-error').innerHTML = response.data.errors[0];
+            if (response.data.errors.name) {
+                document.getElementById('edit-name-' + state + '-error').innerHTML = response.data.errors.name; 
 
-            if (! document.getElementById('edit_name').classList.contains("is-invalid")) {
-                document.getElementById('edit_name').classList.add('is-invalid'); 
-            }                    
+                if (! document.getElementById('edit_name_' + state).classList.contains("is-invalid")) {
+                    document.getElementById('edit_name_' + state).classList.add('is-invalid'); 
+                } 
+            }                   
             
             let editStateModal = document.getElementById('edit-state-' + state + '-modal');
             let modal = bootstrap.Modal.getInstance(editStateModal);
@@ -150,17 +156,21 @@
             }
         })
         .catch((error) => {
-            obj.setAttribute("data-kt-indicator", "off");
-
-            let editStateModal = document.getElementById('edit-state-' + state + '-modal');
-            let emodal = bootstrap.Modal.getInstance(editStateModal);
-            emodal.hide();
-
-            let error_alert = document.getElementById('error-alert-message');
-            error_alert.innerHTML = "An Error Occured, Please try again later";
-            if (error_alert.parentElement.parentNode.classList.contains("d-none")) {
-                error_alert.parentElement.parentNode.classList.remove("d-none");
-            }
+            window.location.replace("{{ route('states.index') }}");
         });
+    }
+
+    function clearEditErrors(state)
+    {
+        document.getElementById('edit-name-' + state + '-error').innerHTML = '';
+
+        if (document.getElementById('edit_name_' + state).classList.contains("is-invalid")) {
+            document.getElementById('edit_name_' + state).classList.remove('is-invalid'); 
+        }
+    }
+
+    function closeModal(state)
+    {
+        document.getElementById('edit_name_' + state.id).value = state.name;
     }
 </script>

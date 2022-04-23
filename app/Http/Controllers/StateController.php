@@ -49,18 +49,24 @@ class StateController extends Controller
         ]);
         
         if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()->all()]);
+            return response()->json(['errors' => $validator->errors()]);
         }
 
         $validated = $validator->safe();
 
-        State::create([
-            'name' => $validated['name']
-        ]);
+        try {
+            State::create([
+                'name' => $validated['name']
+            ]);
+    
+            $request->session()->flash('success', 'State Created Successfully');
+    
+            return response()->json(['success' => true]);
+        } catch (\Throwable $th) {
+            $request->session()->flash('error', "Create Failed. Please try again later");
 
-        $request->session()->flash('success', 'State Created Successfully');
-
-        return response()->json(['success' => true]);
+            abort(500);
+        }
     }
 
     /**
@@ -92,24 +98,33 @@ class StateController extends Controller
      * @param  \App\Models\Regions\State  $state
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, State $state)
+    public function update(Request $request, $id)
     {
+        $state = State::find($id);
+
         $validator = Validator::make($request->all(), [
             'name' => 'required|string',
         ]);
         
         if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()->all()]);
+            return response()->json(['errors' => $validator->errors()]);
         }
 
         $validated = $validator->safe();
 
-        $state->name = $validated['name'];
-        $state->save();
+        try {
+            $state->name = $validated['name'];
+            $state->save();
 
-        $request->session()->flash('success', 'State Updated Successfully');
+            $request->session()->flash('success', 'State Updated Successfully');
 
-        return response()->json(['success' => true]);
+            return response()->json(['success' => true]);
+        } catch (\Throwable $th) {
+            $request->session()->flash('error', "Update Failed. Please try again later");
+
+            abort(500);
+        }
+        
     }
 
     /**

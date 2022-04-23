@@ -45,7 +45,7 @@
     </div> <!-- end card -->
 
     <!--start:: Create Modal -->
-    <div class="modal fade" tabindex="-1" id="create-county-modal">
+    <div class="modal fade" tabindex="-1" id="create-county-modal" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
@@ -154,7 +154,7 @@
             axios.post("{{ route('counties.store') }}", requestBody)
             .then((response) => {
                 if (response.data.success) {
-                    window.location.reload();
+                    window.location.replace("{{ route('counties.index') }}");
                     
                 }else if(response.data.errors){
                     subButton.setAttribute("data-kt-indicator", "off");
@@ -181,17 +181,7 @@
                 }
             })
             .catch((error) => {
-                subButton.setAttribute("data-kt-indicator", "off");
-
-                let createStateModal = document.getElementById('create-county-modal');
-                let cmodal = bootstrap.Modal.getInstance(createStateModal);
-                cmodal.hide();
-
-                let error_alert = document.getElementById('error-alert-message');
-                error_alert.innerHTML = "An Error Occured, Please try again later";
-                if (error_alert.parentElement.parentNode.classList.contains("d-none")) {
-                    error_alert.parentElement.parentNode.classList.remove("d-none");
-                }
+                window.location.replace("{{ route('counties.index') }}");
             })
         });
 

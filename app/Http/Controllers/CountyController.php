@@ -56,14 +56,21 @@ class CountyController extends Controller
 
         $validated = $validator->safe();
 
-        County::create([
-            'name' => $validated['name'],
-            'state_id' => $validated['state_id']
-        ]);
+        try {
+            County::create([
+                'name' => $validated['name'],
+                'state_id' => $validated['state_id']
+            ]);
+    
+            $request->session()->flash('success', 'County Created Successfully');
+    
+            return response()->json(['success' => true]);
+        } catch (\Throwable $th) {
+            $request->session()->flash('error', "Create Failed. Please try again later");
 
-        $request->session()->flash('success', 'County Created Successfully');
-
-        return response()->json(['success' => true]);
+            abort(500);
+        }
+        
     }
 
     /**
@@ -95,8 +102,10 @@ class CountyController extends Controller
      * @param  \App\Models\Regions\County  $county
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, County $county)
+    public function update(Request $request, $id)
     {
+        $county = County::find($id);
+
         $validator = Validator::make($request->all(), [
             'name' => 'required|string',
             'state_id' => 'required|exists:states,id|integer',
@@ -108,13 +117,19 @@ class CountyController extends Controller
 
         $validated = $validator->safe();
 
-        $county->name = $validated['name'];
-        $county->state_id = $validated['state_id'];
-        $county->save();
+        try {
+            $county->name = $validated['name'];
+            $county->state_id = $validated['state_id'];
+            $county->save();
 
-        $request->session()->flash('success', 'County Updated Successfully');
+            $request->session()->flash('success', 'County Updated Successfully');
 
-        return response()->json(['success' => true]);
+            return response()->json(['success' => true]);
+        } catch (\Throwable $th) {
+            $request->session()->flash('error', "Update Failed. Please try again later");
+
+            abort(500);
+        }
     }
 
     /**

@@ -22,15 +22,15 @@
     <!--end::Svg Icon-->
 </button>
 
-<!--start:: Create Modal -->
-<div class="modal fade" tabindex="-1" id="edit-payam-{{ $payam->id }}-modal">
+<!--start:: Edit Modal -->
+<div class="modal fade" tabindex="-1" id="edit-payam-{{ $payam->id }}-modal" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title">Edit PAYAM</h4>
 
                 <!--begin::Close-->
-                <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close" onclick="closeEditModal({{ json_encode($payam) }})">
                     <!--begin::Svg Icon | path: assets/media/icons/duotune/abstract/abs012.svg-->
                     <span class="svg-icon svg-icon-muted svg-icon-2hx"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                         <path opacity="0.3" d="M6.7 19.4L5.3 18C4.9 17.6 4.9 17 5.3 16.6L16.6 5.3C17 4.9 17.6 4.9 18 5.3L19.4 6.7C19.8 7.1 19.8 7.7 19.4 8.1L8.1 19.4C7.8 19.8 7.1 19.8 6.7 19.4Z" fill="black"/>
@@ -48,29 +48,29 @@
 
                     <div class="col-12">
                         <div class="form-group mb-4">
-                            <label class="form-label" for="edit_name">Name</label>
-                            <input type="text" name="edit_name" id="edit_name" class="form-control" value="{{ $payam->name }}"/>
-                            <span class="invalid-feedback" role="alert" id="edit-name-error"></span>
+                            <label class="form-label" for="edit_name_{{ $payam->id }}">Name</label>
+                            <input type="text" name="edit_name_{{ $payam->id }}" id="edit_name_{{ $payam->id }}" class="form-control" value="{{ $payam->name }}"/>
+                            <span class="invalid-feedback" role="alert" id="edit-name-{{ $payam->id }}-error"></span>
                         </div>
 
                         <div class="form-group mb-4">
-                            <label class="form-label" for="edit_state_id">State</label>
-                            <select name="edit_state_id" id="edit_state_id" class="form-control" onchange="updateCounties(this)">
+                            <label class="form-label" for="edit_state_id_{{ $payam->id }}">State</label>
+                            <select name="edit_state_id_{{ $payam->id }}" id="edit_state_id_{{ $payam->id }}" class="form-control" onchange="updateEditCounties(this, {{ $payam->id }})">
                                 @foreach ($states as $state)
                                     <option value="{{ json_encode($state->counties) }}" @if($state->id == $payam->county->state->id) selected @endif>{{ $state->name }}</option>
                                 @endforeach
                             </select>
-                            <span class="invalid-feedback" role="alert" id="edit-state-error"></span>
+                            <span class="invalid-feedback" role="alert" id="edit-state-{{ $payam->id }}-error"></span>
                         </div>
 
                         <div class="form-group mb-4">
-                            <label class="form-label" for="edit_county_id">County</label>
-                            <select name="edit_county_id" id="edit_county_id" class="form-control">
+                            <label class="form-label" for="edit_county_id_{{ $payam->id }}">County</label>
+                            <select name="edit_county_id_{{ $payam->id }}" id="edit_county_id_{{ $payam->id }}" class="form-control">
                                 @foreach ($payam->county->state->counties as $county)
                                     <option value="{{ $county->id }}" @if($county->id == $payam->county_id) selected @endif>{{ $county->name }}</option>
                                 @endforeach
                             </select>
-                            <span class="invalid-feedback" role="alert" id="edit-county-error"></span>
+                            <span class="invalid-feedback" role="alert" id="edit-county-{{ $payam->id }}-error"></span>
                         </div>
 
                         <button type="submit" class="btn btn-primary" onclick="editCounty(this , {{ $payam->id }})" id="edit-submit">
@@ -88,7 +88,7 @@
 <!--end:: Create Modal -->
 
 <!--start:: Delete Modal -->
-<div class="modal fade" tabindex="-1" id="delete-payam-{{ $payam->id }}-modal">
+<div class="modal fade" tabindex="-1" id="delete-payam-{{ $payam->id }}-modal" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -142,8 +142,8 @@
 
         obj.setAttribute("data-kt-indicator", "on");
 
-        let editStateSelect = document.getElementById('edit_state_id');
-        let editCntySelect = document.getElementById('edit_county_id');
+        let editStateSelect = document.getElementById('edit_state_id_' + payam );
+        let editCntySelect = document.getElementById('edit_county_id_' + payam);
 
         let es_state_id;
         
@@ -163,12 +163,12 @@
 
         let requestBody = {
             _method: 'PUT',
-            name : document.getElementById('edit_name').value,
+            name : document.getElementById('edit_name_' + payam).value,
             county_id : es_county_id,
             state_id : es_state_id
         }
 
-        this.clearEditErrors();
+        this.clearEditErrors(payam);
 
         var url = '{{ route("payams.update", ":payam") }}';
         url = url.replace(':payam', payam);
@@ -182,26 +182,26 @@
             obj.setAttribute("data-kt-indicator", "off");
             
             if (response.data.errors.name) {
-                document.getElementById('edit-name-error').innerHTML = response.data.errors.name;
+                document.getElementById('edit-name-' + payam + '-error').innerHTML = response.data.errors.name;
 
-                if (! document.getElementById('edit_name').classList.contains("is-invalid")) {
-                    document.getElementById('edit_name').classList.add('is-invalid'); 
+                if (! document.getElementById('edit_name_' + payam).classList.contains("is-invalid")) {
+                    document.getElementById('edit_name_' + payam).classList.add('is-invalid'); 
                 } 
             }
 
             if (response.data.errors.county_id) {
-                document.getElementById('edit-county-error').innerHTML = response.data.errors.county_id; 
+                document.getElementById('edit-county-' + payam + '-error').innerHTML = response.data.errors.county_id; 
                 
-                if (! document.getElementById('edit_county_id').classList.contains("is-invalid")) {
-                    document.getElementById('edit_county_id').classList.add('is-invalid'); 
+                if (! document.getElementById('edit_county_id_' + payam).classList.contains("is-invalid")) {
+                    document.getElementById('edit_county_id_' + payam).classList.add('is-invalid'); 
                 }
             }
 
             if (response.data.errors.state_id) {
-                document.getElementById('edit-state-error').innerHTML = response.data.errors.state_id; 
+                document.getElementById('edit-state-' + payam + '-error').innerHTML = response.data.errors.state_id; 
                 
-                if (! document.getElementById('edit_state_id').classList.contains("is-invalid")) {
-                    document.getElementById('edit_state_id').classList.add('is-invalid'); 
+                if (! document.getElementById('edit_state_id_' + payam ).classList.contains("is-invalid")) {
+                    document.getElementById('edit_state_id_' + payam ).classList.add('is-invalid'); 
                 }
             }
             
@@ -211,64 +211,91 @@
             }
         })
         .catch((error) => {
-            obj.setAttribute("data-kt-indicator", "off");
-
-            let editStateModal = document.getElementById('edit-payam-' + payam + '-modal');
-            let emodal = bootstrap.Modal.getInstance(editStateModal);
-            emodal.hide();
-
-            let error_alert = document.getElementById('error-alert-message');
-            error_alert.innerHTML = "An Error Occured, Please try again later";
-            if (error_alert.parentElement.parentNode.classList.contains("d-none")) {
-                error_alert.parentElement.parentNode.classList.remove("d-none");
-            }
+            window.location.replace("{{ route('payams.index') }}");
         });
     }
 
-    function clearEditErrors()
+    function clearEditErrors(payam)
     {
-        document.getElementById('edit-state-error').innerHTML = '';
-        document.getElementById('edit-county-error').innerHTML = '';
-        document.getElementById('edit-name-error').innerHTML = '';
+        document.getElementById('edit-state-' + payam + '-error').innerHTML = '';
+        document.getElementById('edit-county-' + payam + '-error').innerHTML = '';
+        document.getElementById('edit-name-' + payam + '-error').innerHTML = '';
 
-        if (document.getElementById('edit_name').classList.contains("is-invalid")) {
-            document.getElementById('edit_name').classList.remove('is-invalid'); 
+        if (document.getElementById('edit_name_' + payam).classList.contains("is-invalid")) {
+            document.getElementById('edit_name_' + payam).classList.remove('is-invalid'); 
         }
 
-        if (document.getElementById('edit_county_id').classList.contains("is-invalid")) {
-            document.getElementById('edit_county_id').classList.remove('is-invalid'); 
+        if (document.getElementById('edit_county_id_' + payam).classList.contains("is-invalid")) {
+            document.getElementById('edit_county_id_' + payam).classList.remove('is-invalid'); 
         }
 
-        if (document.getElementById('edit_state_id').classList.contains("is-invalid")) {
-            document.getElementById('edit_state_id').classList.remove('is-invalid'); 
+        if (document.getElementById('edit_state_id_' + payam ).classList.contains("is-invalid")) {
+            document.getElementById('edit_state_id_' + payam ).classList.remove('is-invalid'); 
         }
     }
 
-    function updateCounties(obj)
+    
+    function closeEditModal(payam)
     {
-        let counties = JSON.parse(obj.options[obj.selectedIndex].value);
-        let countySelect = document.getElementById('edit_county_id');
+        document.getElementById('edit_name_' + payam.id).value = payam.name;
+        let es_state = document.getElementById('edit_state_id_' + payam.id);
+        let es_state_value;
 
-        if (typeof counties != 'object' || Object.keys(counties).length === 0) {
-            countySelect.innerHTML = '';
+        for(let i=0; i < es_state.options.length; i++)
+        {
+            if(es_state.options[i].value == "[]"){
+                es_state_value = null;
+            }else{
+                es_state_value = JSON.parse(es_state.options[i].value);
+                es_state_value = es_state_value['0'].state_id;
+            }
 
-            let snOption = document.createElement("option");
-            snOption.innerHTML = "State has No Counties, Select another State to Proceed";
-            snOption.style.display = "none";
-            countySelect.appendChild(snOption);
+            if(es_state_value == payam.county.state_id) {
+                es_state.selectedIndex = i;
+                break;
+            }
+        }
 
-            document.getElementById('edit-submit').disabled = true;
-        }else{
-            countySelect.innerHTML = '';
+        let es_county = document.getElementById('edit_county_id_' + payam.id);
 
-            counties.forEach(county => {                    
-                let sOption = document.createElement("option");
-                sOption.innerHTML = county.name;
-                sOption.value = county.id;
-                countySelect.appendChild(sOption);
-            });
+        for(let i=0; i < es_county.options.length; i++)
+        {
+            if(es_county.options[i].value == payam.county_id) {
+                es_county.selectedIndex = i;
+                break;
+            }
+        }
+    }
 
-            document.getElementById('edit-submit').disabled = false;
+    function updateEditCounties(eobj, payam)
+    {
+        let ecounties;
+        let ecountySelect = document.getElementById('edit_county_id_' + payam);
+
+        if (eobj.options.length > 0) {
+            if (eobj.options[eobj.selectedIndex].value == '[]') {
+                ecounties = null;
+            }else{
+                ecounties = JSON.parse(eobj.options[eobj.selectedIndex].value);
+            }
+            
+            if (typeof ecounties != 'object' || ecounties == null) {
+                ecountySelect.innerHTML = "";
+
+                let snOption = document.createElement("option");
+                snOption.innerHTML = "State has No Counties";
+                snOption.style.display = "none";
+                ecountySelect.appendChild(snOption);
+            }else{
+                ecountySelect.innerHTML = "";
+
+                ecounties.forEach(county => {                    
+                    let sOption = document.createElement("option");
+                    sOption.innerHTML = county.name;
+                    sOption.value = county.id;
+                    ecountySelect.appendChild(sOption);
+                });
+            }
         }
     }
 </script>

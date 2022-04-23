@@ -44,7 +44,7 @@
     </div> <!-- end card -->
 
     <!--start:: Create Modal -->
-    <div class="modal fade" tabindex="-1" id="create-state-modal">
+    <div class="modal fade" tabindex="-1" id="create-state-modal" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
@@ -137,16 +137,18 @@
             axios.post("{{ route('states.store') }}", requestBody)
             .then((response) => {
                 if (response.data.success) {
-                    window.location.reload();
+                    window.location.replace("{{ route('states.index') }}");
                     
                 }else if(response.data.errors){
                     subButton.setAttribute("data-kt-indicator", "off");
                     
-                    document.getElementById('name-error').innerHTML = response.data.errors[0];
+                    if (response.data.errors.name) {
+                        document.getElementById('name-error').innerHTML = response.data.errors.name;
 
-                    if (! document.getElementById('name').classList.contains("is-invalid")) {
-                        document.getElementById('name').classList.add('is-invalid'); 
-                    }                    
+                        if (! document.getElementById('name').classList.contains("is-invalid")) {
+                            document.getElementById('name').classList.add('is-invalid'); 
+                        } 
+                    }                   
                     
                     let createStateModal = document.getElementById('create-state-modal');
                     let modal = bootstrap.Modal.getInstance(createStateModal);
@@ -154,17 +156,7 @@
                 }
             })
             .catch((error) => {
-                subButton.setAttribute("data-kt-indicator", "off");
-
-                let createStateModal = document.getElementById('create-state-modal');
-                let cmodal = bootstrap.Modal.getInstance(createStateModal);
-                cmodal.hide();
-
-                let error_alert = document.getElementById('error-alert-message');
-                error_alert.innerHTML = "An Error Occured, Please try again later";
-                if (error_alert.parentElement.parentNode.classList.contains("d-none")) {
-                    error_alert.parentElement.parentNode.classList.remove("d-none");
-                }
+                window.location.replace("{{ route('states.index') }}");
             })
         });
     </script>

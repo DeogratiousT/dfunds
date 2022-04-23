@@ -46,7 +46,7 @@
     </div> <!-- end card -->
 
     <!--start:: Create Modal -->
-    <div class="modal fade" tabindex="-1" id="create-payam-modal">
+    <div class="modal fade" tabindex="-1" id="create-payam-modal" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
@@ -78,7 +78,7 @@
                             <div class="form-group mb-4">
                                 <label class="form-label" for="state_id">State</label>
                                 <select name="state_id" id="state_id" class="form-control" onchange="updateCounties(this)">
-                                    <option style="display:none"> -- Select State Here</option>
+                                    <option value="[]" style="display: none"> -- Select State</option>
                                     @foreach ($states as $state)
                                         <option value="{{ json_encode($state->counties) }}">{{ $state->name }}</option>
                                     @endforeach
@@ -157,8 +157,12 @@
 
             let s_state_id;
             if (stateSelect.options.length > 0) {
-                s_state_id = JSON.parse(stateSelect.options[stateSelect.selectedIndex].value);
-                s_state_id = s_state_id['0'].state_id;
+                if (stateSelect.options[stateSelect.selectedIndex].value != '[]') {
+                    s_state_id = JSON.parse(stateSelect.options[stateSelect.selectedIndex].value);
+                    s_state_id = s_state_id['0'].state_id;
+                }else{
+                    s_state_id = null;
+                }                                
             }else{
                 s_state_id = null;
             }
@@ -181,7 +185,7 @@
             axios.post("{{ route('payams.store') }}", requestBody)
             .then((response) => {
                 if (response.data.success) {
-                    window.location.reload();
+                    window.location.replace("{{ route('payams.index') }}");
                     
                 }else if(response.data.errors){
                     subButton.setAttribute("data-kt-indicator", "off");
@@ -216,17 +220,7 @@
                 }
             })
             .catch((error) => {
-                subButton.setAttribute("data-kt-indicator", "off");
-
-                let createStateModal = document.getElementById('create-payam-modal');
-                let cmodal = bootstrap.Modal.getInstance(createStateModal);
-                cmodal.hide();
-
-                let error_alert = document.getElementById('error-alert-message');
-                error_alert.innerHTML = "An Error Occured, Please try again later";
-                if (error_alert.parentElement.parentNode.classList.contains("d-none")) {
-                    error_alert.parentElement.parentNode.classList.remove("d-none");
-                }
+                window.location.replace("{{ route('payams.index') }}");
             })
         });
 
@@ -251,30 +245,33 @@
 
         function updateCounties(obj)
         {
-            let counties = JSON.parse(obj.options[obj.selectedIndex].value);
+            let counties;
             let countySelect = document.getElementById('county_id');
 
-            if (typeof counties != 'object' || Object.keys(counties).length === 0) {
-                countySelect.innerHTML = '';
+            if (obj.options.length > 0) {
+                if (obj.options[obj.selectedIndex].value == '[]') {
+                    counties = null;
+                }else{
+                    counties = JSON.parse(obj.options[obj.selectedIndex].value);
+                }
 
-                let snOption = document.createElement("option");
-                snOption.innerHTML = "State has No Counties";
-                snOption.style.display = "none";
-                countySelect.appendChild(snOption);
-            }else{
-                countySelect.innerHTML = '';
+                if (typeof counties != 'object' || counties == null) {
+                    countySelect.innerHTML = "";
 
-                let siOption = document.createElement("option");
-                siOption.innerHTML = " -- Select County Here";
-                siOption.style.display = "none";
-                countySelect.appendChild(siOption);
+                    let snOption = document.createElement("option");
+                    snOption.innerHTML = "State has No Counties";
+                    snOption.style.display = "none";
+                    countySelect.appendChild(snOption);
+                }else{
+                    countySelect.innerHTML = "";
 
-                counties.forEach(county => {                    
-                    let sOption = document.createElement("option");
-                    sOption.innerHTML = county.name;
-                    sOption.value = county.id;
-                    countySelect.appendChild(sOption);
-                });
+                    counties.forEach(county => {                    
+                        let sOption = document.createElement("option");
+                        sOption.innerHTML = county.name;
+                        sOption.value = county.id;
+                        countySelect.appendChild(sOption);
+                    });
+                }
             }
         }
     </script>

@@ -22,15 +22,15 @@
     <!--end::Svg Icon-->
 </button>
 
-<!--start:: Create Modal -->
-<div class="modal fade" tabindex="-1" id="edit-county-{{ $county->id }}-modal">
+<!--start:: Edit Modal -->
+<div class="modal fade" tabindex="-1" id="edit-county-{{ $county->id }}-modal" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title">Edit County</h4>
 
                 <!--begin::Close-->
-                <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close" onclick="closeModal({{ json_encode($county) }})">
                     <!--begin::Svg Icon | path: assets/media/icons/duotune/abstract/abs012.svg-->
                     <span class="svg-icon svg-icon-muted svg-icon-2hx"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                         <path opacity="0.3" d="M6.7 19.4L5.3 18C4.9 17.6 4.9 17 5.3 16.6L16.6 5.3C17 4.9 17.6 4.9 18 5.3L19.4 6.7C19.8 7.1 19.8 7.7 19.4 8.1L8.1 19.4C7.8 19.8 7.1 19.8 6.7 19.4Z" fill="black"/>
@@ -48,20 +48,19 @@
 
                     <div class="col-12">
                         <div class="form-group mb-4">
-                            <label class="form-label" for="edit_name">Name</label>
-                            <input type="text" name="edit_name" id="edit_name" class="form-control" value="{{ $county->name }}"/>
-                            <span class="invalid-feedback" role="alert" id="edit-name-error"></span>
+                            <label class="form-label" for="edit_name_{{ $county->id }}">Name</label>
+                            <input type="text" name="edit_name_{{ $county->id }}" id="edit_name_{{ $county->id }}" class="form-control" value="{{ $county->name }}"/>
+                            <span class="invalid-feedback" role="alert" id="edit-name-{{ $county->id }}-error"></span>
                         </div>
 
                         <div class="form-group mb-4">
-                            <label class="form-label" for="edit_state_id">State</label>
-                            <select name="edit_state_id" id="edit_state_id" class="form-control">
-                                <option>Select State Here</option>
+                            <label class="form-label" for="edit_state_id_{{ $county->id }}" >State</label>
+                            <select name="edit_state_id_{{ $county->id }}"  id="edit_state_id_{{ $county->id }}"  class="form-control">
                                 @foreach ($states as $state)
                                     <option value="{{ $state->id }}"@if($state->id == $county->state_id) selected @endif>{{ $state->name }}</option>
                                 @endforeach
                             </select>
-                            <span class="invalid-feedback" role="alert" id="edit-state-error"></span>
+                            <span class="invalid-feedback" role="alert" id="edit-state-{{ $county->id }}-error"></span>
                         </div>
 
                         <button type="submit" class="btn btn-primary" onclick="editCounty(this , {{ $county->id }})">
@@ -76,10 +75,10 @@
         </div>
     </div>
 </div>
-<!--end:: Create Modal -->
+<!--end:: Edit Modal -->
 
 <!--start:: Delete Modal -->
-<div class="modal fade" tabindex="-1" id="delete-county-{{ $county->id }}-modal">
+<div class="modal fade" tabindex="-1" id="delete-county-{{ $county->id }}-modal" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -133,15 +132,15 @@
 
         obj.setAttribute("data-kt-indicator", "on");
 
-        let editStateSelect = document.getElementById('edit_state_id');
+        let editStateSelect = document.getElementById('edit_state_id_' + county);
 
         let requestBody = {
             _method: 'PUT',
-            name : document.getElementById('edit_name').value,
+            name : document.getElementById('edit_name_' + county).value,
             state_id : editStateSelect.options[editStateSelect.selectedIndex].value
         }
 
-        this.clearEditErrors(); 
+        this.clearEditErrors(county); 
 
         var url = '{{ route("counties.update", ":county") }}';
         url = url.replace(':county', county);
@@ -155,18 +154,18 @@
             obj.setAttribute("data-kt-indicator", "off");
             
             if (response.data.errors.name) {
-                document.getElementById('edit-name-error').innerHTML = response.data.errors.name;
+                document.getElementById('edit-name-' + county + '-error').innerHTML = response.data.errors.name;
 
-                if (! document.getElementById('edit_name').classList.contains("is-invalid")) {
-                    document.getElementById('edit_name').classList.add('is-invalid'); 
+                if (! document.getElementById('edit_name_' + county).classList.contains("is-invalid")) {
+                    document.getElementById('edit_name_' + county).classList.add('is-invalid'); 
                 } 
             }
 
             if (response.data.errors.state_id) {
-                document.getElementById('edit-state-error').innerHTML = response.data.errors.state_id; 
+                document.getElementById('edit-state-' + county + '-error').innerHTML = response.data.errors.state_id; 
                 
-                if (! document.getElementById('edit_state_id').classList.contains("is-invalid")) {
-                    document.getElementById('edit_state_id').classList.add('is-invalid'); 
+                if (! document.getElementById('edit_state_id_' + county).classList.contains("is-invalid")) {
+                    document.getElementById('edit_state_id_' + county).classList.add('is-invalid'); 
                 }
             }
             
@@ -176,31 +175,35 @@
             }
         })
         .catch((error) => {
-            obj.setAttribute("data-kt-indicator", "off");
-
-            let editStateModal = document.getElementById('edit-county-' + county + '-modal');
-            let emodal = bootstrap.Modal.getInstance(editStateModal);
-            emodal.hide();
-
-            let error_alert = document.getElementById('error-alert-message');
-            error_alert.innerHTML = "An Error Occured, Please try again later";
-            if (error_alert.parentElement.parentNode.classList.contains("d-none")) {
-                error_alert.parentElement.parentNode.classList.remove("d-none");
-            }
+            window.location.replace("{{ route('counties.index') }}");
         });
     }
 
-    function clearEditErrors()
+    function clearEditErrors(county)
     {
-        document.getElementById('edit-state-error').innerHTML = '';
-        document.getElementById('edit-name-error').innerHTML = '';
+        document.getElementById('edit-state-' + county + '-error').innerHTML = '';
+        document.getElementById('edit-name-' + county + '-error').innerHTML = '';
 
-        if (document.getElementById('edit_state_id').classList.contains("is-invalid")) {
-            document.getElementById('edit_state_id').classList.remove('is-invalid'); 
+        if (document.getElementById('edit_name_' + county).classList.contains("is-invalid")) {
+            document.getElementById('edit_name_' + county).classList.remove('is-invalid'); 
         }
 
-        if (document.getElementById('edit_state_id').classList.contains("is-invalid")) {
-            document.getElementById('edit_state_id').classList.remove('is-invalid'); 
+        if (document.getElementById('edit_state_id_' + county).classList.contains("is-invalid")) {
+            document.getElementById('edit_state_id_' + county).classList.remove('is-invalid'); 
+        }
+    }
+
+    function closeModal(county)
+    {
+        document.getElementById('edit_name_' + county.id).value = county.name;
+        let s_state = document.getElementById('edit_state_id_' + county.id);
+
+        for(let i=0; i < s_state.options.length; i++)
+        {
+            if(s_state.options[i].value == county.state_id) {
+                s_state.selectedIndex = i;
+                break;
+            }
         }
     }
 </script>

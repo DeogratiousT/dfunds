@@ -56,14 +56,20 @@ class PayamController extends Controller
 
         $validated = $validator->safe();
 
-        Payam::create([
-            'name' => $validated['name'],
-            'county_id' => $validated['county_id']
-        ]);
+        try {
+            Payam::create([
+                'name' => $validated['name'],
+                'county_id' => $validated['county_id']
+            ]);
+    
+            $request->session()->flash('success', 'PAYAM Created Successfully');
+    
+            return response()->json(['success' => true]);
+        } catch (\Throwable $th) {
+            $request->session()->flash('error', "Create Failed. Please try again later");
 
-        $request->session()->flash('success', 'PAYAM Created Successfully');
-
-        return response()->json(['success' => true]);
+            abort(500);
+        }
     }
 
     /**
@@ -110,13 +116,19 @@ class PayamController extends Controller
 
         $validated = $validator->safe();
 
-        $payam->name = $validated['name'];
-        $payam->county_id = $validated['county_id'];
-        $payam->save();
+        try {
+            $payam->name = $validated['name'];
+            $payam->county_id = $validated['county_id'];
+            $payam->save();
 
-        $request->session()->flash('success', 'PAYAM Updated Successfully');
+            $request->session()->flash('success', 'PAYAM Updated Successfully');
 
-        return response()->json(['success' => true]);
+            return response()->json(['success' => true]);
+        } catch (\Throwable $th) {
+            $request->session()->flash('error', "Update Failed. Please try again later");
+
+            abort(500);
+        }
     }
 
     /**
