@@ -7,7 +7,7 @@
             </div>
         </div>
         <div class="menu-item">
-            <a class="menu-link" href="{{ route('dashboard') }}">
+            <a class="menu-link @if(request()->is('/')) active @endif" href="{{ route('dashboard') }}">
                 <span class="menu-icon">
                     <!--begin::Svg Icon | path: assets/media/icons/duotune/general/gen001.svg-->
                     <span class="svg-icon svg-icon-2">
@@ -20,7 +20,7 @@
                 <span class="menu-title">Home</span>
             </a>
         </div>
-        <div data-kt-menu-trigger="click" class="menu-item menu-accordion mb-1">
+        <div data-kt-menu-trigger="click" class="menu-item menu-accordion mb-1 @if(request()->is('states*') || request()->is('counties*') || request()->is('payams*')) hover show @endif">
             <span class="menu-link">
                 <span class="menu-icon">
                     <!--begin::Svg Icon | path: assets/media/icons/duotune/maps/map001.svg-->
@@ -34,9 +34,9 @@
                 <span class="menu-title">Regions</span>
                 <span class="menu-arrow"></span>
             </span>
-            <div class="menu-sub menu-sub-accordion" kt-hidden-height="120" style="display: none; overflow: hidden;">
+            <div class="menu-sub menu-sub-accordion @if(request()->is('states*') || request()->is('counties*') || request()->is('payams*')) show @endif" kt-hidden-height="120">
                 <div class="menu-item">
-                    <a class="menu-link" href="{{ route('states.index') }}">
+                    <a class="menu-link @if(request()->is('states*')) active @endif" href="{{ route('states.index') }}">
                         <span class="menu-bullet">
                             <span class="bullet bullet-dot"></span>
                         </span>
@@ -44,7 +44,7 @@
                     </a>
                 </div>
                 <div class="menu-item">
-                    <a class="menu-link" href="{{ route('counties.index') }}">
+                    <a class="menu-link @if(request()->is('counties*')) active @endif" href="{{ route('counties.index') }}">
                         <span class="menu-bullet">
                             <span class="bullet bullet-dot"></span>
                         </span>
@@ -52,7 +52,7 @@
                     </a>
                 </div>
                 <div class="menu-item">
-                    <a class="menu-link" href="{{ route('payams.index') }}">
+                    <a class="menu-link @if(request()->is('payams*')) active @endif" href="{{ route('payams.index') }}">
                         <span class="menu-bullet">
                             <span class="bullet bullet-dot"></span>
                         </span>
@@ -62,7 +62,7 @@
             </div>
         </div>
         <div class="menu-item">
-            <a class="menu-link" href="{{ route('partners.index') }}">
+            <a class="menu-link @if(request()->is('partners*')) active @endif" href="{{ route('partners.index') }}">
                 <span class="menu-icon">
                     <!--begin::Svg Icon | path: assets/media/icons/duotune/general/gen049.svg-->
                     <span class="svg-icon svg-icon-muted svg-icon-2">
@@ -75,6 +75,21 @@
                     <!--end::Svg Icon-->
                 </span>
                 <span class="menu-title">Partners</span>
+            </a>
+        </div>
+        <div class="menu-item">
+            <a class="menu-link @if(request()->is('projects*')) active @endif" href="{{ route('projects.index') }}">
+                <span class="menu-icon">
+                    <!--begin::Svg Icon | path: assets/media/icons/duotune/files/fil012.svg-->
+                    <span class="svg-icon svg-icon-muted svg-icon-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path opacity="0.3" d="M10 4H21C21.6 4 22 4.4 22 5V7H10V4Z" fill="black"/>
+                        <path d="M9.2 3H3C2.4 3 2 3.4 2 4V19C2 19.6 2.4 20 3 20H21C21.6 20 22 19.6 22 19V7C22 6.4 21.6 6 21 6H12L10.4 3.60001C10.2 3.20001 9.7 3 9.2 3Z" fill="black"/>
+                        </svg>
+                    </span>
+                    <!--end::Svg Icon-->
+                </span>
+                <span class="menu-title">Projects</span>
             </a>
         </div>
     </div>
