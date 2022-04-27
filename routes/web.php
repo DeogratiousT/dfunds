@@ -6,6 +6,7 @@ use App\Http\Controllers\StateController;
 use App\Http\Controllers\CountyController;
 use App\Http\Controllers\PartnerController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\BeneficiaryController;
 use App\Http\Controllers\Dashboard\DashboardController;
 
 /*
@@ -26,4 +27,5 @@ Route::middleware('auth')->group(function () {
     Route::resource('payams', PayamController::class);
     Route::resource('partners', PartnerController::class);
     Route::resource('projects', ProjectController::class);
+    Route::resource('beneficiaries', BeneficiaryController::class);
 });

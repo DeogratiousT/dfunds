@@ -1,12 +1,12 @@
 @extends('dashboard.layouts.main')
 
-@section('title','Projects')
+@section('title','Beneficiaries')
 
 @section('page-imports')
     <link href="{{ asset('metronic/assets/plugins/custom/datatables/datatables.bundle.css') }}" rel="stylesheet" />
 @endsection
 
-@section('page-title', 'Projects')
+@section('page-title', 'Beneficiaries')
 
 @section('breadcrumb')
     <ol class="breadcrumb text-muted fs-6 fw-bold">
@@ -16,7 +16,7 @@
 @endsection
 
 @section('page-right')
-    <a href="{{ route('projects.create') }}" class="btn btn-sm btn-primary">
+    <a href="{{ route('beneficiaries.create') }}" class="btn btn-sm btn-primary">
         <!--begin::Svg Icon | path: icons/duotune/arrows/arr075.svg-->
         <span class="svg-icon svg-icon-3">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -24,23 +24,21 @@
                 <rect x="4.36396" y="11.364" width="16" height="2" rx="1" fill="black" />
             </svg>
         </span>
-        <!--end::Svg Icon-->New Project
+        <!--end::Svg Icon-->New Beneficiary
     </a>
 @endsection
 
 @section('content')
     <div class="card">
         <div class="card-body">
-            <table id="projects-laratable" class="table table-striped table-row-bordered gy-5 gs-7 border rounded">
+            <table id="beneficiaries-laratable" class="table table-striped table-row-bordered gy-5 gs-7 border rounded">
                 <thead>
                     <tr class="fw-bolder fs-6 text-gray-800 px-7">
+                        <th>INTERNAL_ID</th>
                         <th>Name</th>
-                        <th>Partner</th>
-                        <th>Start</th>
-                        <th>End</th>
-                        <th>Payam</th>
-                        <th>Payment Type</th>
-                        <th>status</th>
+                        <th>Mobile No.</th>
+                        <th>National ID</th>
+                        <th>Token No.</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -54,17 +52,15 @@
     <script src="{{ asset('js/app.js') }}"></script>
     <script>
         $(document).ready(function(){
-            $("#projects-laratable").DataTable({
+            $("#beneficiaries-laratable").DataTable({
                 serverSide: true,
-                ajax: "{{ route('projects.index') }}",
+                ajax: "{{ route('beneficiaries.index') }}",
                 columns: [                
-                        { name: 'name' },
-                        { name: 'partner.name' , orderable : false },
-                        { name: 'start_date' },
-                        { name: 'end_date' },
-                        { name: 'payam.name' , orderable : false },
-                        { name: 'payment_type' },
-                        { name: 'status' },
+                        { name: 'internal_id' },
+                        { name: 'first_name' },
+                        { name: 'mobile_number' },
+                        { name: 'national_id' },
+                        { name: 'token_number' },
                         { name: 'action' , orderable: false, searchable: false }
                 ],
                 "language": {
