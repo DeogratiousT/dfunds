@@ -1,0 +1,37 @@
+type Payam @model(class: "\\App\\Models\\Regions\\Payam"){
+    id: ID!
+    name: String!
+    county: County! @belongsTo
+    created_at: DateTime!
+    updated_at: DateTime!
+}
+
+input CreatePayamInput {  
+    name: String! @rules(apply: ["required", "string", "unique:payams,name"])
+    county_id: Int! @rules(apply: ["required", "integer", "exists:counties,id"])
+}
+
+input UpdatePayamInput {  
+    id: Int! @rules(apply: ["required", "integer", "exists:payams,id"])
+    name: String! @rules(apply: ["required", "string"])
+    county_id: Int! @rules(apply: ["required", "integer", "exists:counties,id"])
+}
+
+input DestroyPayamInput {  
+    id: Int! @rules(apply: ["required", "integer", "exists:payams,id"])
+}
+
+type CreatePayamResponse {
+    message: String!
+    payam: Payam!
+}
+
+type UpdatePayamResponse {
+    message: String!
+    payam: Payam!
+}
+
+type DestroyPayamResponse {
+    message: String!
+    payam: Payam!
+}

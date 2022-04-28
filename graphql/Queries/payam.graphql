@@ -1,0 +1,4 @@
+extend type Query {
+    payam(id: ID @eq): Payam @find
+    payams(name: String @where(operator: "like")): [Payam!]! @paginate(defaultCount: 10)
+}

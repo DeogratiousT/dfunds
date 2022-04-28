@@ -1,0 +1,7 @@
+extend type Mutation {
+    createPayam(input: CreatePayamInput @spread): CreatePayamResponse! @field(resolver: "PayamMutation@store")
+
+    updatePayam(input: UpdatePayamInput @spread): UpdatePayamResponse! @field(resolver: "PayamMutation@update")
+
+    deletePayam(input: DestroyPayamInput @spread): DestroyPayamResponse! @field(resolver: "PayamMutation@destroy")
+}
