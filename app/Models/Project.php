@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Partner;
+use App\Models\Beneficiary;
 use App\Models\Regions\Payam;
 use App\Models\Regions\State;
 use Spatie\Sluggable\HasSlug;
@@ -60,5 +61,10 @@ class Project extends Model
     public function state()
     {
         return $this->belongsTo(State::class);
+    }
+
+    public function beneficiaries()
+    {
+        return $this->hasMany(Beneficiary::class);
     }
 }

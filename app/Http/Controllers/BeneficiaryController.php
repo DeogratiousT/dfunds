@@ -81,8 +81,8 @@ class BeneficiaryController extends Controller
         
         $beneficiary->internal_id = Str::upper(Str::random(5));
         $beneficiary->first_name = $request->first_name;
-        $beneficiary->middle_name = isset($request->middle_name) ?: null;
-        $beneficiary->last_name = isset($request->last_name) ?: null;
+        $beneficiary->middle_name = isset($request->middle_name) ? $request->middle_name : null;
+        $beneficiary->last_name = isset($request->last_name) ? $request->last_name : null;
         $beneficiary->age = $request->age;
         $beneficiary->mobile_number = $request->mobile_number;
         $beneficiary->national_id = $request->national_id;

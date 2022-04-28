@@ -4,12 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Models\Partner;
 use App\Models\Project;
+use App\Models\Beneficiary;
 use Illuminate\Http\Request;
 use App\Models\Regions\State;
 use App\Models\Regions\County;
 use App\Http\Controllers\Controller;
 use App\Laratables\ProjectsLaratables;
 use Freshbitsweb\Laratables\Laratables;
+use App\Laratables\ProjectBeneficiariesLaratables;
 
 class ProjectController extends Controller
 {
@@ -85,7 +87,9 @@ class ProjectController extends Controller
      */
     public function show(Project $project)
     {
-        //
+        $beneficiaries = Beneficiary::where('project_id', $project->id)->orderBy('first_name')->paginate(12);
+
+        return view('dashboard.projects.show', ['project'=>$project, 'beneficiaries'=>$beneficiaries]);
     }
 
     /**
