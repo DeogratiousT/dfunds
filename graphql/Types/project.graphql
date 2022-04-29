@@ -1,0 +1,62 @@
+type Project {
+    id: ID!
+    name: String!
+    slug: String!
+    description: String!
+    start_date: Date!
+    end_date: Date!
+    partner: Partner! @belongsTo
+    state: State! @belongsTo
+    county: County! @belongsTo
+    payam: Payam! @belongsTo
+    payment_type: String!
+    status: String!
+    created_at: DateTime!
+    updated_at: DateTime!
+}
+
+input CreateProjectInput {  
+    name: String! @rules(apply: ["required", "string", "unique:projects,name"])
+    description: String! @rules(apply: ["required", "string"])
+    start_date: Date! @rules(apply: ["required", "date", "before_or_equal:end_date"])
+    end_date: Date! @rules(apply: ["required", "date", "after_or_equal:start_date"])
+    partner_id: Int! @rules(apply: ["required", "integer", "exists:partners,id"])
+    state_id: Int! @rules(apply: ["required", "integer", "exists:states,id"])
+    county_id: Int! @rules(apply: ["required", "integer", "exists:counties,id"])
+    payam_id: Int! @rules(apply: ["required", "integer", "exists:payams,id"])
+    payment_type: String! @rules(apply: ["required", "string"])
+    status: String! @rules(apply: ["required", "string"])
+}
+
+input UpdateProjectInput {  
+    id: Int! @rules(apply: ["required", "integer", "exists:projects,id"])
+    name: String! @rules(apply: ["required", "string"])
+    description: String! @rules(apply: ["required", "string"])
+    start_date: Date! @rules(apply: ["required", "date", "before_or_equal:end_date"])
+    end_date: Date! @rules(apply: ["required", "date", "after_or_equal:start_date"])
+    partner_id: Int! @rules(apply: ["required", "integer", "exists:partners,id"])
+    state_id: Int! @rules(apply: ["required", "integer", "exists:states,id"])
+    county_id: Int! @rules(apply: ["required", "integer", "exists:counties,id"])
+    payam_id: Int! @rules(apply: ["required", "integer", "exists:payams,id"])
+    payment_type: String! @rules(apply: ["required", "string"])
+    status: String! @rules(apply: ["required", "string"])
+}
+
+input DestroyProjectInput {  
+    id: Int! @rules(apply: ["required", "integer", "exists:projects,id"])
+}
+
+type CreateProjectResponse {
+    message: String!
+    project: Project!
+}
+
+type UpdateProjectResponse {
+    message: String!
+    project: Project!
+}
+
+type DestroyProjectResponse {
+    message: String!
+    project: Project!
+}

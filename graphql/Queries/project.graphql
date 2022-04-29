@@ -1,0 +1,4 @@
+extend type Query {
+    project(id: ID @eq): Project @find
+    projects(name: String @where(operator: "like")): [Project!]! @paginate(defaultCount: 10)
+}

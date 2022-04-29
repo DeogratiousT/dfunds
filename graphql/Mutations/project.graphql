@@ -1,0 +1,7 @@
+extend type Mutation {
+    createProject(input: CreateProjectInput @spread): CreateProjectResponse! @field(resolver: "ProjectMutation@store")
+
+    updateProject(input: UpdateProjectInput @spread): UpdateProjectResponse! @field(resolver: "ProjectMutation@update")
+
+    deleteProject(input: DestroyProjectInput @spread): DestroyProjectResponse! @field(resolver: "ProjectMutation@destroy")
+}

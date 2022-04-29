@@ -1,0 +1,7 @@
+extend type Mutation {
+    createPartner(input: CreatePartnerInput @spread): CreatePartnerResponse! @field(resolver: "PartnerMutation@store")
+
+    updatePartner(input: UpdatePartnerInput @spread): UpdatePartnerResponse! @field(resolver: "PartnerMutation@update")
+
+    deletePartner(input: DestroyPartnerInput @spread): DestroyPartnerResponse! @field(resolver: "PartnerMutation@destroy")
+}

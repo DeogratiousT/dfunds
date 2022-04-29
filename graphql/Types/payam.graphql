@@ -1,6 +1,7 @@
 type Payam @model(class: "\\App\\Models\\Regions\\Payam"){
     id: ID!
     name: String!
+    slug: String!
     county: County! @belongsTo
     created_at: DateTime!
     updated_at: DateTime!

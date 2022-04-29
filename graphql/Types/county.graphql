@@ -1,6 +1,7 @@
 type County @model(class: "\\App\\Models\\Regions\\County"){
     id: ID!
     name: String!
+    slug: String!
     state: State! @belongsTo
     created_at: DateTime!
     updated_at: DateTime!

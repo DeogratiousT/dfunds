@@ -1,0 +1,35 @@
+type Partner{
+    id: ID!
+    name: String!
+    slug: String!
+    created_at: DateTime!
+    updated_at: DateTime!
+}
+
+input CreatePartnerInput {  
+    name: String! @rules(apply: ["required", "string", "unique:partners,name"])
+}
+
+input UpdatePartnerInput {  
+    id: Int! @rules(apply: ["required", "integer", "exists:partners,id"])
+    name: String! @rules(apply: ["required", "string"])
+}
+
+input DestroyPartnerInput {  
+    id: Int! @rules(apply: ["required", "integer", "exists:partners,id"])
+}
+
+type CreatePartnerResponse {
+    message: String!
+    partner: Partner!
+}
+
+type UpdatePartnerResponse {
+    message: String!
+    partner: Partner!
+}
+
+type DestroyPartnerResponse {
+    message: String!
+    partner: Partner!
+}

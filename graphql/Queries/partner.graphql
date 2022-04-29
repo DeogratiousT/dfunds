@@ -1,0 +1,7 @@
+extend type Query {
+    partner(id: ID @eq
+      name: String @eq @rules(apply: ["prohibits:id", "required_without:id", "string"])
+    ): Partner @find
+
+    partners(name: String @where(operator: "like")): [Partner!]! @paginate(defaultCount: 10)
+}
