@@ -42,6 +42,13 @@ return [
             'visibility' => 'public',
         ],
 
+        'beneficiaries' => [
+            'driver' => 'local',
+            'root' => public_path('images'),
+            'url' => env('APP_URL').'/images/beneficiaries',
+            'visibility' => 'public',
+        ],
+
         's3' => [
             'driver' => 's3',
             'key' => env('AWS_ACCESS_KEY_ID'),

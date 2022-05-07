@@ -69,7 +69,7 @@
                     </div>
                     <div class="col-md-6">
                         <div class="symbol symbol-200px">
-                            <img src="{{ asset('storage/beneficiaries/' .  $beneficiary->featured_image) }}" alt=""/>
+                            <img src="{{ asset('images/beneficiaries/' .  $beneficiary->featured_image) }}" alt=""/>
                         </div>
                     </div>
                 </div>

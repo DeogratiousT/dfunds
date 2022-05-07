@@ -73,7 +73,7 @@ class BeneficiaryController extends Controller
             //Filename to store
             $fileNameToStore = $filename.'_'.Str::random('5').'.'.$extension;
             //Upload Image
-            Storage::disk('public')->putFileAs('beneficiaries', $request->featured_image, $fileNameToStore);
+            Storage::disk('beneficiaries')->putFileAs('beneficiaries', $request->featured_image, $fileNameToStore);
 
             $beneficiary->featured_image = $fileNameToStore;
 
@@ -152,7 +152,12 @@ class BeneficiaryController extends Controller
             //Filename to store
             $fileNameToStore = $filename.'_'.Str::random('5').'.'.$extension;
             //Upload Image
-            Storage::disk('public')->putFileAs('beneficiaries', $request->featured_image, $fileNameToStore);
+            Storage::disk('beneficiaries')->putFileAs('beneficiaries', $request->featured_image, $fileNameToStore);
+
+            // Delete First Image
+            if (Storage::disk('beneficiaries')->exists('beneficiaries/' . $beneficiary->featured_image)) {
+                Storage::disk('beneficiaries')->delete('beneficiaries/' . $beneficiary->featured_image);
+            }
 
             $beneficiary->featured_image = $fileNameToStore;
 
@@ -182,6 +187,12 @@ class BeneficiaryController extends Controller
     public function destroy(Beneficiary $beneficiary)
     {
         $beneficiary->delete();
+        
+        // Delete Image
+        if (Storage::disk('beneficiaries')->exists('beneficiaries/' . $beneficiary->featured_image)) {
+            Storage::disk('beneficiaries')->delete('beneficiaries/' . $beneficiary->featured_image);
+        }
+
         return redirect()->route('beneficiaries.index')->with('success', 'Beneficiary Deleted Successfully');
     }
 }

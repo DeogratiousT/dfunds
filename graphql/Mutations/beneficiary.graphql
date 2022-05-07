@@ -1,0 +1,7 @@
+extend type Mutation {
+    createBeneficiary(input: CreateBeneficiaryInput @spread): CreateBeneficiaryResponse! @field(resolver: "BeneficiaryMutation@store")
+
+    updateBeneficiary(input: UpdateBeneficiaryInput @spread): UpdateBeneficiaryResponse! @field(resolver: "BeneficiaryMutation@update")
+
+    deleteBeneficiary(input: DestroyBeneficiaryInput @spread): DestroyBeneficiaryResponse! @field(resolver: "BeneficiaryMutation@destroy")
+}

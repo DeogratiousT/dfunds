@@ -1,0 +1,4 @@
+extend type Query {
+    beneficiary(id: ID @eq): Beneficiary @find
+    beneficiaries(name: String @where(operator: "like")): [Beneficiary!]! @paginate(defaultCount: 10)
+}

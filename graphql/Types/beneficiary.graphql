@@ -1,0 +1,66 @@
+type Beneficiary {
+    id: ID!
+    internal_id: String!
+    slug: String!
+    first_name: String!
+    middle_name: String
+    last_name: String
+    age: Int!
+    mobile_number: String!
+    national_id: String!
+    token_number: String!
+    project: Project! @belongsTo
+    amount: FloatType!
+    featured_image: String!
+    payment_status: String!
+    created_at: DateTime!
+    updated_at: DateTime!
+}
+
+input CreateBeneficiaryInput {  
+    first_name: String! @rules(apply: ["required", "string"])
+    middle_name: String @rules(apply: ["nullable", "string"])
+    last_name: String @rules(apply: ["nullable", "string"])
+    age: Int! @rules(apply: ["required", "integer"])
+    mobile_number: String! @rules(apply: ["required", "string"])
+    national_id: String! @rules(apply: ["required", "string", "unique:beneficiaries,national_id"])
+    token_number: String! @rules(apply: ["required", "string", "unique:beneficiaries,token_number"])
+    project_id: Int! @rules(apply: ["required", "integer", "exists:projects,id"])
+    featured_image: Upload! @rules(apply: ["required", "image"])
+    amount: FloatType! @rules(apply: ["required", "numeric"])
+    payment_status: String! @rules(apply: ["required", "string"])
+}
+
+input UpdateBeneficiaryInput {  
+    id: Int! @rules(apply: ["required", "integer", "exists:beneficiaries,id"])
+    first_name: String! @rules(apply: ["required", "string"])
+    middle_name: String! @rules(apply: ["nullable", "string"])
+    last_name: String! @rules(apply: ["nullable", "string"])
+    age: Int! @rules(apply: ["required", "integer"])
+    mobile_number: String! @rules(apply: ["required", "string"])
+    national_id: String! @rules(apply: ["required", "string"])
+    token_number: String! @rules(apply: ["required", "string"])
+    project_id: Int! @rules(apply: ["required", "integer", "exists:projects,id"])
+    featured_image: Upload! @rules(apply: ["required", "image"])
+    amount: FloatType! @rules(apply: ["required", "numeric"])
+    payment_status: String! @rules(apply: ["required", "string"])
+}
+
+input DestroyBeneficiaryInput {  
+    id: Int! @rules(apply: ["required", "integer", "exists:beneficiaries,id"])
+}
+
+type CreateBeneficiaryResponse {
+    message: String!
+    beneficiary: Beneficiary!
+}
+
+type UpdateBeneficiaryResponse {
+    message: String!
+    beneficiary: Beneficiary!
+}
+
+type DestroyBeneficiaryResponse {
+    message: String!
+    beneficiary: Beneficiary!
+}
