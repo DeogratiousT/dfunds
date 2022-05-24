@@ -7,6 +7,7 @@ use App\Http\Controllers\CountyController;
 use App\Http\Controllers\PartnerController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\BeneficiaryController;
+use App\Http\Controllers\BeneficiaryImportController;
 use App\Http\Controllers\Dashboard\DashboardController;
 
 /*
@@ -28,4 +29,6 @@ Route::middleware('auth')->group(function () {
     Route::resource('partners', PartnerController::class);
     Route::resource('projects', ProjectController::class);
     Route::resource('beneficiaries', BeneficiaryController::class);
+
+    Route::post('beneficiaries-import', [BeneficiaryImportController::class, 'importXlsx'])->name('beneficiaries.import');
 });
