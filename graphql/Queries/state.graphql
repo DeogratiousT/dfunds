@@ -3,5 +3,5 @@ extend type Query {
       name: String @eq @rules(apply: ["prohibits:id", "required_without:id", "string"])
     ): State @find
 
-    states(name: String @where(operator: "like")): [State!]! @paginate(defaultCount: 10)
+    states(name: String @where(operator: "like")): [State!]! @all
 }

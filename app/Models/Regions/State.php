@@ -37,7 +37,7 @@ class State extends Model
 
     public function counties()
     {
-        return $this->hasMany(County::class);
+        return $this->hasMany(County::class, 'state_id');
     }
 
     public function payams()

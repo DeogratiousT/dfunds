@@ -1,4 +1,4 @@
 extend type Query {
     project(id: ID @eq): Project @find
-    projects(status: String @where(operator: "like")): [Project!]! @paginate(defaultCount: 10)
+    projects(status: String @where(operator: "like")): [Project!]! @all
 }

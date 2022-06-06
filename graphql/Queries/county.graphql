@@ -1,4 +1,4 @@
 extend type Query {
     county(id: ID @eq): County @find
-    counties(name: String @where(operator: "like")): [County!]! @paginate(defaultCount: 10)
+    counties(name: String @where(operator: "like")): [County!]! @all
 }

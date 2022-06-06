@@ -3,6 +3,7 @@ type County @model(class: "\\App\\Models\\Regions\\County"){
     name: String!
     slug: String!
     state: State! @belongsTo
+    payams: [Payam!]! @hasMany
     created_at: DateTime!
     updated_at: DateTime!
 }

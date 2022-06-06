@@ -1,4 +1,4 @@
 extend type Query {
     beneficiary(id: ID @eq): Beneficiary @find
-    beneficiaries(project_id: Int @where(operator: "like")): [Beneficiary!]! @paginate(defaultCount: 10)
+    beneficiaries(project_id: Int @where(operator: "like")): [Beneficiary!]! @all
 }
