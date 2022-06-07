@@ -2,6 +2,7 @@
 
 namespace App\Models\Regions;
 
+use App\Models\Project;
 use Spatie\Sluggable\HasSlug;
 use App\Models\Regions\County;
 use Spatie\Sluggable\SlugOptions;
@@ -37,5 +38,10 @@ class Payam extends Model
     public function county()
     {
         return $this->belongsTo(County::class);
+    }
+
+    public function projects()
+    {
+        return $this->hasMany(Project::class);
     }
 }
