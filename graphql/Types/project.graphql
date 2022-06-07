@@ -9,6 +9,7 @@ type Project {
     state: State! @belongsTo
     county: County! @belongsTo
     payam: Payam! @belongsTo
+    beneficiaries: [Beneficiary]!
     payment_type: String!
     status: String!
     created_at: DateTime!
