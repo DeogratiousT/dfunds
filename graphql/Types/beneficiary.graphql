@@ -11,7 +11,7 @@ type Beneficiary {
     token_number: String!
     project: Project! @belongsTo
     amount: FloatType!
-    featured_image: String!
+    featured_image: String
     payment_status: String!
     created_at: DateTime!
     updated_at: DateTime!
