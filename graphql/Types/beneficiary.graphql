@@ -34,8 +34,8 @@ input CreateBeneficiaryInput {
 input UpdateBeneficiaryInput {  
     id: Int! @rules(apply: ["required", "integer", "exists:beneficiaries,id"])
     first_name: String! @rules(apply: ["required", "string"])
-    middle_name: String! @rules(apply: ["nullable", "string"])
-    last_name: String! @rules(apply: ["nullable", "string"])
+    middle_name: String @rules(apply: ["nullable", "string"])
+    last_name: String @rules(apply: ["nullable", "string"])
     age: Int! @rules(apply: ["required", "integer"])
     mobile_number: String! @rules(apply: ["required", "string"])
     national_id: String! @rules(apply: ["required", "string"])

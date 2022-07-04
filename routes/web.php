@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\PayamController;
 use App\Http\Controllers\StateController;
 use App\Http\Controllers\CountyController;
@@ -23,6 +24,8 @@ use App\Http\Controllers\Dashboard\DashboardController;
 
 Route::middleware('auth')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+    Route::resource('users', UserController::class);
+
     Route::resource('states', StateController::class);
     Route::resource('counties', CountyController::class);
     Route::resource('payams', PayamController::class);
