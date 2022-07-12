@@ -32,6 +32,9 @@
                         <!--begin::Username-->
                         <div class="d-flex flex-column">
                             <div class="fw-bolder d-flex align-items-center fs-5">{{ Auth::user()->name }}</div>
+                            @foreach (Auth::user()->roles as $role)
+                                <span class="fw-bold text-info text-hover-primary fs-7">{{ $role->name }}</span> 
+                            @endforeach
                             <a href="#" class="fw-bold text-muted text-hover-primary fs-7">{{ Auth::user()->email }}</a>
                         </div>
                         <!--end::Username-->

@@ -22,16 +22,23 @@ use App\Http\Controllers\Dashboard\DashboardController;
 |
 */
 
-Route::middleware('auth')->group(function () {
-    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
-    Route::resource('users', UserController::class);
+Route::middleware(['auth'])->group(function () {
+    Route::middleware(['without.old.password'])->group(function () {
+        Route::get('/users/password/reset', [DashboardController::class, 'passwordResetIndex'])->name('users.password.reset.index');
+        Route::post('/users/password/reset', [DashboardController::class, 'passwordReset'])->name('users.password.reset');
+    });
 
-    Route::resource('states', StateController::class);
-    Route::resource('counties', CountyController::class);
-    Route::resource('payams', PayamController::class);
-    Route::resource('partners', PartnerController::class);
-    Route::resource('projects', ProjectController::class);
-    Route::resource('beneficiaries', BeneficiaryController::class);
+    Route::middleware(['has.old.password'])->group(function () {
+        Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+        Route::resource('users', UserController::class);
+        
+        Route::resource('states', StateController::class);
+        Route::resource('counties', CountyController::class);
+        Route::resource('payams', PayamController::class);
+        Route::resource('partners', PartnerController::class);
+        Route::resource('projects', ProjectController::class);
+        Route::resource('beneficiaries', BeneficiaryController::class);
 
-    Route::post('beneficiaries-import', [BeneficiaryImportController::class, 'importXlsx'])->name('beneficiaries.import');
+        Route::post('beneficiaries-import', [BeneficiaryImportController::class, 'importXlsx'])->name('beneficiaries.import');
+    });
 });

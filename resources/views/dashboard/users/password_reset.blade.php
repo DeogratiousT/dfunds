@@ -10,53 +10,16 @@
 
 @section('breadcrumb')
     <ol class="breadcrumb text-muted fs-6 fw-bold">
-        <li class="breadcrumb-item pe-3"><a href="{{ route('users.index') }}" class="pe-3">{{ $user->name }}</a></li>
-        <li class="breadcrumb-item px-3 text-muted">Edit</li>
+        <li class="breadcrumb-item px-3 text-muted">Reset Password</li>
     </ol>
 @endsection
 
 @section('content')
     <div class="card">
         <div class="card-body">
-            <form action="{{ route('users.update', $user) }}" method="POST" id="update-user-form">
+            <h4 class="text-info">You have to reset your password to proceed</h4>
+            <form action="{{ route('users.password.reset') }}" method="POST" id="update-user-password-form">
                 @csrf
-                @method('PUT')
-                <div class="row mb-4">
-                    <div class="form-group col-12">
-                        <label class="form-label" for="name">Full Name</label>
-                        <input type="text" name="name" id="name" class="form-control @error('name') is-invalid @enderror" value="{{ $user->name }}"/>
-
-                        @error('name')
-                            <span class="invalid-feedback">{{ $message }}</span>
-                        @enderror
-                    </div>
-                </div>
-
-                <div class="row mb-4">
-                    <div class="form-group col-12">
-                        <label class="form-label" for="email">Email</label>
-                        <input type="email" name="email" id="email" class="form-control @error('email') is-invalid @enderror" value="{{ $user->email }}"/>
-
-                        @error('email')
-                            <span class="invalid-feedback">{{ $message }}</span>
-                        @enderror
-                    </div>
-                </div> 
-
-                <div class="row mb-4">
-                    <div class="form-group col-12">
-                        <label class="form-label" for="roles">Roles</label>
-                        <select name="roles[]" id="roles" class="form-control @error('roles') is-invalid @enderror" multiple>
-                            @foreach ($roles as $role)
-                                <option value="{{ $role->name }}">{{ $role->name }}</option>
-                            @endforeach
-                        </select>
-
-                        @error('roles')
-                            <span class="invalid-feedback">{{ $message }}</span>
-                        @enderror
-                    </div>
-                </div> 
 
                 <!--begin::Input group-->
                 <div class="mb-10 fv-row" data-kt-password-meter="true">
@@ -120,7 +83,7 @@
 
             obj.setAttribute("data-kt-indicator", "on");
 
-            document.getElementById('update-user-form').submit();
+            document.getElementById('update-user-password-form').submit();
         }
     </script>
 @endpush

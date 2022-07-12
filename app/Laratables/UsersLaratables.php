@@ -6,7 +6,17 @@ class UsersLaratables
 {
     public static function laratableQueryConditions($query)
     {
-        return $query->with('roles')->orderBy('name');
+        return $query->orderBy('created_at','desc')->with('roles');
+    }
+
+    public static function laratablesAdditionalColumns()
+    {
+        return ['active'];
+}
+
+    public static function laratablesCustomStatus($user)
+    {
+        return view('dashboard.users.index_state',['user'=>$user])->render();
     }
 
     public static function laratablesCustomRole($user)
