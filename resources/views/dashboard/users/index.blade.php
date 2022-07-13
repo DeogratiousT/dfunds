@@ -37,6 +37,7 @@
                         <th>Name</th>
                         <th>Email</th>
                         <th>Role(s)</th>
+                        <th>Partner</th>
                         <th>Status</th>
                         <th>Action</th>
                     </tr>
@@ -58,6 +59,7 @@
                         { name: 'name' },
                         { name: 'email' },
                         { name: 'role' , orderable : false},
+                        { name: 'partner.name' , orderable : false},
                         { name: 'status' , orderable : false},
                         { name: 'action' , orderable : false, searchable : false }
                 ],

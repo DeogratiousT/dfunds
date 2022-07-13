@@ -23,12 +23,17 @@ use App\Http\Controllers\Dashboard\DashboardController;
 */
 
 Route::middleware(['auth'])->group(function () {
+    Route::middleware(['has.old.password', 'partner'])->group(function () {
+        Route::get('/partners/dashboard', [DashboardController::class, 'partnerDashboard'])->name('partners.dashboard');
+        Route::get('/partners/projects/{project}', [DashboardController::class, 'partnerProject'])->name('partners.project');
+    });
+    
     Route::middleware(['without.old.password'])->group(function () {
         Route::get('/users/password/reset', [DashboardController::class, 'passwordResetIndex'])->name('users.password.reset.index');
         Route::post('/users/password/reset', [DashboardController::class, 'passwordReset'])->name('users.password.reset');
     });
 
-    Route::middleware(['has.old.password'])->group(function () {
+    Route::middleware(['has.old.password', 'admin'])->group(function () {
         Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
         Route::resource('users', UserController::class);
         

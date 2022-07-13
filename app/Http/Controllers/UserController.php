@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Partner;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use App\Mail\UserAccountCreated;
@@ -38,8 +39,9 @@ class UserController extends Controller
      */
     public function create()
     {
+        $partners = Partner::all();
         $roles = Role::whereNotIn('name', ['Admin'])->get();
-        return view('dashboard.users.create', ['roles'=>$roles] );
+        return view('dashboard.users.create', ['roles'=>$roles, 'partners'=>$partners] );
     }
 
     /**
@@ -60,7 +62,8 @@ class UserController extends Controller
                 'max:255',
                 Rule::unique(User::class),
             ],
-            'roles' => ['required', 'array']
+            'roles' => ['required', 'array'],
+            'partner_id' => ['nullable', 'exists:partners,id']
         ]);
 
         if ($validator->fails()) {
@@ -70,11 +73,17 @@ class UserController extends Controller
         $validated = $validator->safe();
 
         try {
-            $user = User::create([
-                'name' => $validated['first_name'] . ' ' . $validated['last_name'],
-                'email' => $validated['email'],
-                'password' => Hash::make('password'),
-            ]);
+            $user = new User;
+            
+            $user->name = $validated['first_name'] . ' ' . $validated['last_name'];
+            $user->email = $validated['email'];
+            $user->password = Hash::make('password');
+            
+            if (isset($validated['partner_id'])) {
+                $user->partner_id = $validated['partner_id'];
+            }
+
+            $user->save();
     
             $user->assignRole($validated['roles']);
 
@@ -106,8 +115,9 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
+        $partners = Partner::all();
         $roles = Role::whereNotIn('name', ['Admin'])->get();
-        return view('dashboard.users.edit', ['user'=>$user, 'roles'=>$roles]);
+        return view('dashboard.users.edit', ['user'=>$user, 'roles'=>$roles, 'partners'=>$partners]);
     }
 
     /**
@@ -137,6 +147,7 @@ class UserController extends Controller
                     ->numbers()
                 ->symbols() 
             ],
+            'partner_id' => ['nullable', 'exists:partners,id']
         ]);
 
         if ($validator->fails()) {
@@ -148,9 +159,15 @@ class UserController extends Controller
         try {
             $user->name = $validated['name'];
             $user->email = $validated['email'];
+
             if (isset($validated['password'])) {
                 $user->password = $validated['password'];
             }
+
+            if (isset($validated['partner_id'])) {
+                $user->partner_id = $validated['partner_id'];
+            }
+
             $user->save();
     
             $user->syncRoles($validated['roles']);

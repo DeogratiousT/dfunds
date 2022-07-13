@@ -58,6 +58,21 @@
                     </div>
                 </div> 
 
+                <div class="row mb-4">
+                    <div class="form-group col-12">
+                        <label class="form-label" for="partner_id">Partner</label>
+                        <select name="partner_id" id="partner_id" class="form-control @error('partner_id') is-invalid @enderror">
+                            @foreach ($partners as $partner)
+                                <option value="{{ $partner->id }}" @if($user->partner_id == $partner->id) selected @endif>{{ $partner->name }}</option>
+                            @endforeach
+                        </select>
+
+                        @error('partner_id')
+                            <span class="invalid-feedback">{{ $message }}</span>
+                        @enderror
+                    </div>
+                </div> 
+
                 <!--begin::Input group-->
                 <div class="mb-10 fv-row" data-kt-password-meter="true">
                     <!--begin::Wrapper-->

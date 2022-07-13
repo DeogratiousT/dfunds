@@ -14,12 +14,6 @@
             <!-- begin::Status -->
             @include('dashboard.includes.messages')
             <!-- end::Status -->
-            <!--begin::Link-->
-            <div class="text-gray-400 fw-bold fs-4">
-                New Here? 
-                <a href="{{ route('register') }}" class="link-primary fw-bolder">Create an Account</a>
-            </div>
-            <!--end::Link-->
         </div>
         <!--begin::Heading-->
         <!--begin::Input group-->
@@ -63,18 +57,6 @@
                 <span class="indicator-progress">Please wait... 
                 <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
             </button>
-            <!--end::Submit button-->
-            {{-- <!--begin::Separator-->
-            <div class="text-center text-muted text-uppercase fw-bolder mb-5">or</div>
-            <!--end::Separator-->
-            <!--begin::Google link-->
-            <a href="#" class="btn btn-flex flex-center btn-light btn-lg w-100 mb-5">
-            <img alt="Logo" src="/metronic8/demo3/assets/media/svg/brand-logos/google-icon.svg" class="h-20px me-3" />Continue with Google</a>
-            <!--end::Google link-->
-            <!--begin::Google link-->
-            <a href="#" class="btn btn-flex flex-center btn-light btn-lg w-100 mb-5">
-            <img alt="Logo" src="/metronic8/demo3/assets/media/svg/brand-logos/facebook-4.svg" class="h-20px me-3" />Continue with Facebook</a>
-            <!--end::Google link--> --}}
         </div>
         <!--end::Actions-->
     </form>

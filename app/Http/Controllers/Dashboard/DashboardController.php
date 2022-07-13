@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Dashboard;
 
+use App\Models\Project;
 use Illuminate\Http\Request;
 use App\Mail\UserPasswordUpdated;
 use App\Http\Controllers\Controller;
@@ -63,5 +64,16 @@ class DashboardController extends Controller
         } catch (\Throwable $th) {
             return redirect()->route('users.password.reset.index')->with('error', 'Update Failed. Please try again later');
         }
+    }
+
+    public function partnerDashboard()
+    {
+        $partner = Auth::user()->partner;
+        return view('partners.dashboard', ['partner'=>$partner]);
+    }
+
+    public function partnerProject(Project $project)
+    {
+        return view('partners.projects', ['project'=>$project]);
     }
 }

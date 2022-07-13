@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class IsPartner
 {
@@ -16,8 +17,8 @@ class IsPartner
      */
     public function handle(Request $request, Closure $next)
     {
-        if (! Auth::user()->hasRole['Partner']) {
-            return redirect()->route('dashboard');
+        if (! Auth::user()->hasRole(['Partner', 'Admin'])) {
+            abort(403);
         }
 
         return $next($request);

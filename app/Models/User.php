@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Partner;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Notifications\Notifiable;
@@ -22,7 +23,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'active'
+        'active',
+        'partner_id'
     ];
 
     /**
@@ -44,4 +46,9 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'active' => 'boolean'
     ];
+
+    public function partner()
+    {
+        return $this->belongsTo(Partner::class);
+    }
 }

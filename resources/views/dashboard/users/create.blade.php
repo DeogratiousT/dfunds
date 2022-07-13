@@ -55,7 +55,7 @@
 
                 <div class="row mb-4">
                     <div class="form-group col-12">
-                        <label class="form-label" for="roles">Project</label>
+                        <label class="form-label" for="roles">Roles</label>
                         <select name="roles[]" id="roles" class="form-control @error('roles') is-invalid @enderror" multiple>
                             @foreach ($roles as $role)
                                 <option value="{{ $role->name }}">{{ $role->name }}</option>
@@ -63,6 +63,21 @@
                         </select>
 
                         @error('roles')
+                            <span class="invalid-feedback">{{ $message }}</span>
+                        @enderror
+                    </div>
+                </div> 
+
+                <div class="row mb-4">
+                    <div class="form-group col-12">
+                        <label class="form-label" for="partner_id">Partner</label>
+                        <select name="partner_id" id="partner_id" class="form-control @error('partner_id') is-invalid @enderror">
+                            @foreach ($partners as $partner)
+                                <option value="{{ $partner->id }}">{{ $partner->name }}</option>
+                            @endforeach
+                        </select>
+
+                        @error('partner_id')
                             <span class="invalid-feedback">{{ $message }}</span>
                         @enderror
                     </div>
