@@ -161,7 +161,7 @@ class UserController extends Controller
             $user->email = $validated['email'];
 
             if (isset($validated['password'])) {
-                $user->password = $validated['password'];
+                $user->password = Hash::make($validated['password']);
             }
 
             if (isset($validated['partner_id'])) {
